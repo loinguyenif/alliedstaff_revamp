@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" description="COM_ATELMAN_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+        <field name="state"
+               type="status"
+               label="COM_ATELMAN_FILTER_STATE"
+               description="COM_ATELMAN_FILTER_STATE_DESC"
+               onchange="this.form.submit();"
+        >
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+
+        
+
+    </fields>
+
+    <fields name="list">
+
+        <field name="fullordering"
+               type="list"
+               label="COM_ATELMAN_LIST_FULL_ORDERING"
+               description="COM_ATELMAN_LIST_FULL_ORDERING_DESC"
+               onchange="this.form.submit();"
+               default="a.id DESC"
+        >
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="a.id ASC">COM_ATELMAN_ID_ASC</option><option value="a.id DESC">COM_ATELMAN_ID_DESC</option><option value="a.warranty_id ASC">COM_ATELMAN_WARRANTY_ID_ASC</option><option value="a.warranty_id DESC">COM_ATELMAN_WARRANTY_ID_DESC</option><option value="a.customer_id ASC">COM_ATELMAN_CUSTOMER_ID_ASC</option><option value="a.customer_id DESC">COM_ATELMAN_CUSTOMER_ID_DESC</option><option value="a.product_id ASC">COM_ATELMAN_PRODUCT_ID_ASC</option><option value="a.product_id DESC">COM_ATELMAN_PRODUCT_ID_DESC</option><option value="a.serial_no ASC">COM_ATELMAN_SERIAL_NO_ASC</option><option value="a.serial_no DESC">COM_ATELMAN_SERIAL_NO_DESC</option><option value="a.serial_no_2 ASC">COM_ATELMAN_SERIAL_NO_2_ASC</option><option value="a.serial_no_2 DESC">COM_ATELMAN_SERIAL_NO_2_DESC</option><option value="a.replacement_pn ASC">COM_ATELMAN_REPLACEMENT_PN_ASC</option><option value="a.replacement_pn DESC">COM_ATELMAN_REPLACEMENT_PN_DESC</option><option value="a.po_no ASC">COM_ATELMAN_PO_NO_ASC</option><option value="a.po_no DESC">COM_ATELMAN_PO_NO_DESC</option><option value="a.so_no ASC">COM_ATELMAN_SO_NO_ASC</option><option value="a.so_no DESC">COM_ATELMAN_SO_NO_DESC</option><option value="a.invoice_no ASC">COM_ATELMAN_INVOICE_NO_ASC</option><option value="a.invoice_no DESC">COM_ATELMAN_INVOICE_NO_DESC</option><option value="a.purchase_date ASC">COM_ATELMAN_PURCHASE_DATE_ASC</option><option value="a.purchase_date DESC">COM_ATELMAN_PURCHASE_DATE_DESC</option><option value="a.comments ASC">COM_ATELMAN_COMMENTS_ASC</option><option value="a.comments DESC">COM_ATELMAN_COMMENTS_DESC</option><option value="a.expired_date ASC">COM_ATELMAN_EXPIRED_DATE_ASC</option><option value="a.expired_date DESC">COM_ATELMAN_EXPIRED_DATE_DESC</option><option value="a.expired_date_manual ASC">COM_ATELMAN_EXPIRED_DATE_MANUAL_ASC</option><option value="a.expired_date_manual DESC">COM_ATELMAN_EXPIRED_DATE_MANUAL_DESC</option><option value="a.extended_warranty ASC">COM_ATELMAN_EXTENDED_WARRANTY_ASC</option><option value="a.extended_warranty DESC">COM_ATELMAN_EXTENDED_WARRANTY_DESC</option><option value="a.extended_expired_date ASC">COM_ATELMAN_EXTENDED_EXPIRED_DATE_ASC</option><option value="a.extended_expired_date DESC">COM_ATELMAN_EXTENDED_EXPIRED_DATE_DESC</option><option value="a.created_date ASC">COM_ATELMAN_CREATED_DATE_ASC</option><option value="a.created_date DESC">COM_ATELMAN_CREATED_DATE_DESC</option>
+
+        </field>
+
+       <field name="limit"
+               type="limitbox"
+               label="COM_ATELMAN_LIST_LIMIT"
+               description="COM_ATELMAN_LIST_LIMIT_DESC"
+               class="input-mini"
+               default="25"
+               onchange="this.form.submit();"
+        />
+
+    </fields>
+
+</form>

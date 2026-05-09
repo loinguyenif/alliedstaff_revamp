@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="atelesis" method="upgrade" version="5.0">
+    <name>plg_atelesis_logs</name>
+    <author>ifoundries</author>
+    <version>1.0.0</version>
+    <description>Atelesis Logs Plugin</description>
+    <files>
+        <filename plugin="logs">logs.php</filename>
+        <filename>index.html</filename>
+    </files>
+</extension>

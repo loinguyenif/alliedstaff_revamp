@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="5.0" method="upgrade">
+    <name>Partner Redirect System Plugin</name>
+    <author>Nathan</author>
+    <version>1.0.0</version>
+    <description>Redirect user login from /partner to /partner instead of /administrator</description>
+    <files>
+        <filename plugin="partnerredirect">partnerredirect.php</filename>
+    </files>
+</extension>

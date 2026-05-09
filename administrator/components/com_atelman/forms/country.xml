@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Atelman\Component\Atelman\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="country" required="true" label="COM_ATELMAN_FORM_LBL_COUNTRY_COUNTRY" description="COM_ATELMAN_FORM_DESC_COUNTRY_COUNTRY" hint="COM_ATELMAN_FORM_LBL_COUNTRY_COUNTRY"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>

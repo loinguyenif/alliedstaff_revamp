@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" description="COM_ATELMAN_SEARCH_FILTER_SUBMIT"
+               label="COM_USERS_FILTER_SEARCH_DESC"
+               class="js-stools-search-string" />
+
+        <field name="state"
+               type="status"
+               label="COM_ATELMAN_FILTER_STATE"
+               description="COM_ATELMAN_FILTER_STATE_DESC"
+               onchange="this.form.submit();"
+        >
+            <option value="">JOPTION_SELECT_PUBLISHED</option>
+        </field>
+
+        
+
+    </fields>
+
+    <fields name="list">
+
+        <field name="fullordering"
+               type="list"
+               label="COM_ATELMAN_LIST_FULL_ORDERING"
+               description="COM_ATELMAN_LIST_FULL_ORDERING_DESC"
+               onchange="this.form.submit();"
+               default="a.id DESC"
+        >
+            <option value="">JGLOBAL_SORT_BY</option>
+            <option value="a.id ASC">COM_ATELMAN_ID_ASC</option><option value="a.id DESC">COM_ATELMAN_ID_DESC</option><option value="a.first_name ASC">COM_ATELMAN_FIRST_NAME_ASC</option><option value="a.first_name DESC">COM_ATELMAN_FIRST_NAME_DESC</option><option value="a.last_name ASC">COM_ATELMAN_LAST_NAME_ASC</option><option value="a.last_name DESC">COM_ATELMAN_LAST_NAME_DESC</option><option value="a.address ASC">COM_ATELMAN_ADDRESS_ASC</option><option value="a.address DESC">COM_ATELMAN_ADDRESS_DESC</option><option value="a.city ASC">COM_ATELMAN_CITY_ASC</option><option value="a.city DESC">COM_ATELMAN_CITY_DESC</option><option value="a.postal_code ASC">COM_ATELMAN_POSTAL_CODE_ASC</option><option value="a.postal_code DESC">COM_ATELMAN_POSTAL_CODE_DESC</option><option value="a.country ASC">COM_ATELMAN_COUNTRY_ASC</option><option value="a.country DESC">COM_ATELMAN_COUNTRY_DESC</option><option value="a.telephone ASC">COM_ATELMAN_TELEPHONE_ASC</option><option value="a.telephone DESC">COM_ATELMAN_TELEPHONE_DESC</option><option value="a.fax ASC">COM_ATELMAN_FAX_ASC</option><option value="a.fax DESC">COM_ATELMAN_FAX_DESC</option><option value="a.email ASC">COM_ATELMAN_EMAIL_ASC</option><option value="a.email DESC">COM_ATELMAN_EMAIL_DESC</option><option value="a.company_name ASC">COM_ATELMAN_COMPANY_NAME_ASC</option><option value="a.company_name DESC">COM_ATELMAN_COMPANY_NAME_DESC</option><option value="a.job_title ASC">COM_ATELMAN_JOB_TITLE_ASC</option><option value="a.job_title DESC">COM_ATELMAN_JOB_TITLE_DESC</option><option value="a.created_date ASC">COM_ATELMAN_CREATED_DATE_ASC</option><option value="a.created_date DESC">COM_ATELMAN_CREATED_DATE_DESC</option>
+
+        </field>
+
+       <field name="limit"
+               type="limitbox"
+               label="COM_ATELMAN_LIST_LIMIT"
+               description="COM_ATELMAN_LIST_LIMIT_DESC"
+               class="input-mini"
+               default="25"
+               onchange="this.form.submit();"
+        />
+
+    </fields>
+
+</form>

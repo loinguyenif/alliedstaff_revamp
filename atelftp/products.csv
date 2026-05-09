@@ -1,0 +1,4 @@
+product_no,model_no,product_name,warranty,is_previous3years
+TEST 001,TEST 001,TEST 001,10,0
+TEST 002,TEST 002,TEST 002,20,1
+990-00001-10,AT-LXPWR/AC-10,"AC POWER SUPPLY,US",12,0

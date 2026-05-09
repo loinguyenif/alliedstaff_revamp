@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Atelman\Component\Atelman\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="warranty_id" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_WARRANTY_ID" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_WARRANTY_ID" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_WARRANTY_ID"/>
+    <field name="customer_id" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_CUSTOMER_ID" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_CUSTOMER_ID" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_CUSTOMER_ID"/>
+    <field name="product_id" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_PRODUCT_ID" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_PRODUCT_ID" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_PRODUCT_ID"/>
+    <field name="serial_no" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_SERIAL_NO" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_SERIAL_NO" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_SERIAL_NO"/>
+    <field name="serial_no_2" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_SERIAL_NO_2" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_SERIAL_NO_2" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_SERIAL_NO_2"/>
+    <field name="replacement_pn" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_REPLACEMENT_PN" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_REPLACEMENT_PN" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_REPLACEMENT_PN"/>
+    <field name="po_no" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_PO_NO" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_PO_NO" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_PO_NO"/>
+    <field name="so_no" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_SO_NO" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_SO_NO" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_SO_NO"/>
+    <field name="invoice_no" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_INVOICE_NO" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_INVOICE_NO" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_INVOICE_NO"/>
+    <field name="purchase_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_PURCHASE_DATE" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_PURCHASE_DATE" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_PURCHASE_DATE"/>
+    <field name="comments" type="textarea" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_COMMENTS" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_COMMENTS" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_COMMENTS"/>
+    <field name="expired_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXPIRED_DATE" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_EXPIRED_DATE" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXPIRED_DATE"/>
+    <field name="expired_date_manual" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXPIRED_DATE_MANUAL" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_EXPIRED_DATE_MANUAL" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXPIRED_DATE_MANUAL"/>
+    <field name="extended_warranty" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXTENDED_WARRANTY" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_EXTENDED_WARRANTY" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXTENDED_WARRANTY"/>
+    <field name="extended_expired_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXTENDED_EXPIRED_DATE" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_EXTENDED_EXPIRED_DATE" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_EXTENDED_EXPIRED_DATE"/>
+    <field name="created_date" default="CURRENT_TIMESTAMP" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_WARRANTYITEM_CREATED_DATE" description="COM_ATELMAN_FORM_DESC_WARRANTYITEM_CREATED_DATE" hint="COM_ATELMAN_FORM_LBL_WARRANTYITEM_CREATED_DATE"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>

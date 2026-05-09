@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Atelman\Component\Atelman\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="product_no" type="text" label="Part Number:" description="COM_ATELMAN_FORM_DESC_PRODUCT_PRODUCT_NO" hint=""/>
+    <field name="model_no" type="text" label="Model Number:" description="COM_ATELMAN_FORM_DESC_PRODUCT_MODEL_NO" hint=""/>
+    <field name="product_name" type="text" label="Product Description:" description="COM_ATELMAN_FORM_DESC_PRODUCT_PRODUCT_NAME" hint=""/>
+    <field name="warranty" label="COM_ATELMAN_WARRANTY_FORM" description="COM_ATELMAN_FORM_DESC_PRODUCT_WARRANTY" hint=""/>
+
+    <field
+			name="is_previous3years"
+			type="radio"
+			label="Previously 3 years warranty?"
+			description=""
+			default="0"
+			class="btn-group btn-group-yesno"
+		>
+			<option value="0">JNO</option>
+      <option value="1">JYES</option>   
+		</field>
+
+    <field name="created_date" default="CURRENT_TIMESTAMP" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_PRODUCT_CREATED_DATE" description="COM_ATELMAN_FORM_DESC_PRODUCT_CREATED_DATE" hint="COM_ATELMAN_FORM_LBL_PRODUCT_CREATED_DATE"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>

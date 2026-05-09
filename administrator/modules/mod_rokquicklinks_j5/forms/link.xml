@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="link">
+        <field name="title" type="text" label="Title" required="true"/>
+        <field name="url" type="url" label="URL" required="true"/>
+        <field name="icon" type="media" label="Icon"/>
+        <field name="published" type="radio" label="Published">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+        </field>
+    </fields>
+</form>

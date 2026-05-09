@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Atelman\Component\Atelman\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="first_name" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_FIRST_NAME" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_FIRST_NAME" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_FIRST_NAME"/>
+    <field name="last_name" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_LAST_NAME" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_LAST_NAME" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_LAST_NAME"/>
+    <field name="address" type="textarea" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_ADDRESS" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_ADDRESS" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_ADDRESS"/>
+    <field name="city" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_CITY" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_CITY" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_CITY"/>
+    <field name="postal_code" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_POSTAL_CODE" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_POSTAL_CODE" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_POSTAL_CODE"/>
+    <field name="country" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_COUNTRY" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_COUNTRY" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_COUNTRY"/>
+    <field name="telephone" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_TELEPHONE" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_TELEPHONE" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_TELEPHONE"/>
+    <field name="fax" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_FAX" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_FAX" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_FAX"/>
+    <field name="email" validate="email" type="email" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_EMAIL" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_EMAIL" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_EMAIL"/>
+    <field name="company_name" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_COMPANY_NAME" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_COMPANY_NAME" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_COMPANY_NAME"/>
+    <field name="job_title" type="text" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_JOB_TITLE" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_JOB_TITLE" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_JOB_TITLE"/>
+    <field name="created_date" default="CURRENT_TIMESTAMP" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_CREATED_DATE" description="COM_ATELMAN_FORM_DESC_WARRANTYREGISTER_CREATED_DATE" hint="COM_ATELMAN_FORM_LBL_WARRANTYREGISTER_CREATED_DATE"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>

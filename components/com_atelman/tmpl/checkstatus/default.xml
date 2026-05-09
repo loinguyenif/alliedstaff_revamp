@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="CheckRequestPage" option="View">
+        <message>
+                        <![CDATA[COM_ATELMAN_TITLE_LIST_VIEW_RMAITEMS_DESC]]>
+        </message>
+	</layout>
+	
+</metadata>

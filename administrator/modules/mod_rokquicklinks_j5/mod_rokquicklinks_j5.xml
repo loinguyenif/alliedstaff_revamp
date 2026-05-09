@@ -1,0 +1,35 @@
+<extension type="module" version="5.0" client="administrator" method="upgrade">
+    <name>mod_rokquicklinks_j5</name>
+    <author>Nathan</author>
+    <version>1.0.0</version>
+    <description>Module Quicklinks with repeatable-table Subform for Joomla 5</description>
+
+    <files>
+        <filename module="mod_rokquicklinks_j5">mod_rokquicklinks_j5.php</filename>
+        <filename>helper.php</filename>
+        <folder>tmpl</folder>
+        <folder>forms</folder>
+    </files>
+
+    <media folder="media" destination="mod_rokquicklinks_j5"/>
+
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="links"
+				label="Quick Links"
+				type="subform" 
+                layout="joomla.form.field.subform.repeatable-table"
+                multiple="true">                
+                    <form>
+                        <fields name="link">
+                            <field name="title" type="text" label="Title" required="true"/>
+                            <field name="url" type="url" label="URL" required="true"/>
+                            <field name="icon" type="media" label="Icon"/>
+                        </fields>
+                    </form>
+                </field>          
+            </fieldset>
+        </fields>
+    </config>
+</extension>

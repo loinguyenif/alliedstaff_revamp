@@ -1,0 +1,618 @@
+/*****************************/
+/*** Core html setup stuff ***/
+/*****************************/
+
+@font-face {
+	font-family: 'sourcesanspro-semibold';
+	src: url('../font/sourcesanspro-semibold.otf');
+	src: url('../font/sourcesanspro-semibold.eot');
+	src: url('../font/sourcesanspro-semibold.eot?#iefix') format('embedded-opentype'),
+		url('../font/sourcesanspro-semibold.woff') format('woff'),
+		url('../font/sourcesanspro-semibold.ttf') format('truetype'),
+		url('../font/sourcesanspro-semibold.svg#sourcesanspro-semibold') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'sourcesanspro-regular';
+	src: url('../font/sourcesanspro-regular.otf');
+	src: url('../font/sourcesanspro-regular.eot');
+	src: url('../font/sourcesanspro-regular.eot?#iefix') format('embedded-opentype'),
+		url('../font/sourcesanspro-regular.woff') format('woff'),
+		url('../font/sourcesanspro-regular.ttf') format('truetype'),
+		url('../font/sourcesanspro-regular.svg#sourcesanspro-regular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+html {
+	height: 100%;
+	margin-bottom: 1px;
+}
+
+form {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: arial;
+	background: url('../images/bg-front.jpg') repeat;
+	line-height: 1.3em;
+	margin: 0;
+	font-size: 14px;
+	color: #333;
+}
+
+label {
+	font-weight: bold;
+	font-size: 14px;
+}
+
+a:link,
+a:visited {
+	text-decoration: none;
+	font-weight: normal;
+	color: #e12e29;
+	font-family: "sourcesanspro-semibold";
+}
+
+a:hover {
+	font-weight: normal;
+	color: #D74A46;
+}
+
+.clear {
+	clear: both;
+}
+
+span.red {
+	color: red;
+}
+
+input.button {
+	cursor: pointer;
+	background-color: #cb3631;
+	color: #fff;
+	font-family: "sourcesanspro-semibold";
+	border: 0;
+	padding: 10px 20px;
+	font-size: 14px;
+	border-radius: 6px;
+}
+
+input.inputbox {
+	width: 300px;
+}
+
+input.inputresult {
+	border: 0;
+	width: 300px;
+}
+
+input.invalid {
+	border: 1px solid red !important;
+}
+
+textarea {
+	width: 300px;
+}
+
+p {
+	margin-top: 0;
+	margin-bottom: 5px;
+}
+
+img {
+	border: 0 none;
+}
+
+div.calendar {
+	background: url('../images/ico-calendar.png') no-repeat;
+	width: 28px;
+	height: 28px;
+	float: left;
+	border: 0;
+	cursor: pointer;
+}
+
+div#allied-telesis-front {
+	width: 1020px;
+	margin: 40px auto;
+	border-top: 5px solid #332f30;
+	background-color: #fff;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+div#allied-telesis-front .top-header {
+	margin: 40px 25px;
+}
+
+div#allied-telesis-front .header {
+	font-size: 30px;
+	background-color: #d74a46;
+	color: #fff;
+	padding: 25px;
+}
+
+div#logo {
+	width: 256px;
+	height: 25px;
+	background: url(../images/ATelesis_2color_web.png) 0 0 no-repeat;
+	float: left;
+}
+
+div#ajaxloader {
+	width: 16px;
+	height: 16px;
+	background: url(../images/ajax-loader.gif) 0 0 no-repeat;
+	padding: 0 0 0 20px;
+	float: left;
+}
+
+#footer {
+	padding: 30px 25px;
+	font-family: "sourcesanspro-semibold";
+	text-align: center;
+	background-color: #fcfcfc;
+	border-top: 1px solid #ccc;
+}
+
+/* TOP MENU - NAVIGATION */
+div#topmenu {
+	float: right;
+	font-size: 16px;
+}
+
+div#topmenu a {
+	font-family: "sourcesanspro-semibold";
+	color: #312d2e;
+	margin-left: 30px;
+}
+
+div#topmenu a#active_menu,
+div#topmenu a:hover {
+	color: #d74a46;
+}
+
+div#topmenu span.mainlevel {
+	display: none;
+}
+
+/* form validation */
+.invalid {
+	border: 1px solid #ff0000 !important;
+}
+
+label.invalid {
+	color: #ff0000;
+}
+
+.fValidator-msg {
+	color: #ff0000;
+}
+
+.atel-required {
+	background-color: #ffc;
+	border-color: #cc0
+}
+
+/* plz see js/fValidator.js
+
+/* JOS Calendar - Re-arrange */
+.calendar {}
+
+/* */
+.ATFormFormat {
+	margin: 30px 25px;
+}
+
+.ATFormFormat .left {
+	float: left;
+	width: 45%;
+}
+
+.ATFormFormat .right {
+	float: right;
+	width: 50%;
+}
+
+.ATFormFormat .fields {
+	margin-bottom: 30px;
+}
+
+.ATFormFormat .fields .label {
+	width: 25%;
+	float: left;
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+.ATFormFormat .fields .inputs {
+	width: 75%;
+	float: left;
+}
+
+.ATFormFormat input[type="text"],
+.ATFormFormat input[type="password"] {
+	border: 1px solid #ccc;
+	padding: 5px;
+	color: #666666;
+}
+
+.ATFormFormat textarea {
+	border: 1px solid #ccc;
+	padding: 5px;
+	height: 75px;
+}
+
+.ATFormFormat select {
+	border: 1px solid #ccc;
+	padding: 5px;
+	width: 91%;
+	color: #666666;
+}
+
+.ATFormFormat .compulsoryfield {
+	text-align: right;
+	font-size: 11px;
+	color: #cb3631;
+	font-style: italic;
+	margin: 10px 0;
+}
+
+.ATFormFormat .warranty-item {
+	background-color: #f8f8f8;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 20px;
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.ATFormFormat .warranty-item .left {
+	float: left;
+	width: 50%
+}
+
+.ATFormFormat .warranty-item .right {
+	float: right;
+	width: 50%;
+}
+
+.ATFormFormat .warranty-item .action-item {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-weight: bold;
+	font-size: 14px;
+	font-family: "sourcesanspro-semibold";
+	background-color: #e4e4e4;
+}
+
+.ATFormFormat .warranty-item .action-item a.ico-delete {
+	background: url('../images/ico-delete.png') no-repeat;
+	width: 18px;
+	height: 17px;
+	display: block;
+}
+
+.ATFormFormat .warranty-item .addrow {
+	margin-bottom: 20px;
+}
+
+.ATFormFormat .warranty-item .label {
+	float: left;
+	width: 35%;
+	font-weight: bold;
+}
+
+.ATFormFormat .warranty-item .field {
+	float: left;
+	width: 65%;
+}
+
+.ATFormFormat .warranty-item input[type="text"],
+.ATFormFormat .warranty-item textarea {
+	width: 92%;
+}
+
+.ATFormFormat .warranty-item select {
+	width: 96%;
+	color: #666666;
+}
+
+.ATFormFormat .warranty-item input.date-input {
+	width: 82%;
+	float: left;
+}
+
+.ATFormFormat .warranty-item .model_input1 {
+	margin-right: 5px;
+}
+
+.ATFormFormat .warranty-item .model_input2 {
+	font-size: 12px;
+}
+
+.ATFormFormat .warranty-item .model_input3 {}
+
+/* WARRANTY REGISTRATION */
+#WarrantyRegistrationFields {}
+
+#WarrantyRegistrationFields .serial_no_listing {
+	position: absolute;
+	border: 1px solid #333;
+	background-color: #fff;
+	height: 150px;
+	overflow: scroll;
+	overflow-x: hidden;
+	width: 500px;
+	z-index: 200;
+}
+
+#WarrantyRegistrationFields .serial_no_listing a {
+	padding: 0 5px;
+	display: block;
+}
+
+#WarrantyRegistrationFields .serial_no_listing a:hover {
+	background-color: #E12E29;
+	color: #fff;
+	cursor: pointer
+}
+
+/* RMA Request */
+#ATRMARequest {}
+
+#ATRMARequest .note1 {
+	font-size: 12px;
+	font-style: italic;
+	margin-bottom: 30px;
+}
+
+#ATRMARequest {}
+
+#RMARequestFields .product_listing,
+#RMARequestFields .serial_no_listing {
+	position: absolute;
+	border: 1px solid #333;
+	background-color: #fff;
+	height: 150px;
+	overflow: scroll;
+	overflow-x: hidden;
+	width: 500px;
+	z-index: 10;
+}
+
+#RMARequestFields .product_listing a,
+#RMARequestFields .serial_no_listing a {
+	padding: 0 5px;
+	display: block;
+}
+
+#RMARequestFields .product_listing a:hover,
+#RMARequestFields .serial_no_listing a:hover {
+	background-color: #E12E29;
+	color: #fff;
+	cursor: pointer
+}
+
+/* CHECK RMA STATUS */
+.ATCheckRequestForm {
+	background-color: #f8f8f8;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.ATCheckRequestForm table tr td {
+	padding: 5px 5px;
+}
+
+.ATCheckRequestForm table tr td.left {
+	width: 150px
+}
+
+.ATCheckRequestForm table tr td.right {
+	width: 300px;
+}
+
+.ATCheckRequestForm .label {
+	float: left;
+	width: 35% !important;
+	font-weight: bold;
+	margin-top: 5px;
+}
+
+.ATCheckRequestForm .inputs {
+	float: left;
+	width: 65% !important;
+}
+
+.ATCheckRequestForm input[type="text"] {
+	width: 96%;
+}
+
+#status-rma-code {
+	float: left;
+	margin-left: 5px;
+}
+
+/* CHECK WARRANTY STATUS */
+#status-warranty-reg th {
+	text-align: left;
+	padding: 5px 5px;
+}
+
+/* forms */
+table.adminform textarea {
+	width: 540px;
+	height: 400px;
+	font-size: 1em;
+	color: #000099;
+}
+
+div.search input {
+	width: 145px;
+	border: 1px solid #ccc;
+	margin: 15px 0 10px 0;
+}
+
+form#form-login fieldset {
+	border: 0 none;
+	margin: 0em;
+	padding: 0.2em;
+}
+
+form#form-login ul {
+	padding-left: 20px;
+}
+
+form#com-form-login fieldset {
+	border: 0 none;
+	margin: 0em;
+	padding: 0.2em;
+}
+
+form#com-form-login ul {
+	padding-left: 20px;
+}
+
+/* System Messages */
+/* see system general.css */
+
+.pagination span {
+	padding: 2px;
+}
+
+.pagination a {
+	padding: 2px;
+}
+
+/* Polls */
+.pollstableborder td {
+	text-align: left;
+}
+
+/* WebLinks */
+span.description {
+	display: block;
+	padding-left: 30px;
+}
+
+/* Frontend Editing*/
+fieldset {
+	border: 1px solid #ccc;
+	margin-top: 15px;
+	padding: 15px;
+}
+
+legend {
+	margin: 0;
+	padding: 0 10px;
+}
+
+td.key {
+	border-bottom: 1px solid #eee;
+	color: #666;
+}
+
+/* Tooltips */
+
+.tool-tip {
+	float: left;
+	background: #ffc;
+	border: 1px solid #D4D5AA;
+	padding: 5px;
+	max-width: 200px;
+}
+
+.tool-title {
+	padding: 0;
+	margin: 0;
+	font-size: 100%;
+	font-weight: bold;
+	margin-top: -15px;
+	padding-top: 15px;
+	padding-bottom: 5px;
+	background: url(../../system/images/selector-arrow.png) no-repeat;
+}
+
+.tool-text {
+	font-size: 100%;
+	margin: 0;
+}
+
+/* System Standard Messages */
+#system-message {
+	margin-bottom: 20px;
+}
+
+#system-message dt.message {
+	display: none;
+}
+
+#system-message dd.message {
+	margin: 0;
+}
+
+#system-message dd.message ul {
+	background: #C3D2E5 url(../../system/images/notice-info.png) 4px center no-repeat;
+	border-top: 3px solid #DE7A7B;
+	border-bottom: 3px solid #DE7A7B;
+	margin: 0px;
+	padding-left: 40px;
+	text-indent: 0px;
+}
+
+#system-message dd.message ul li {
+	padding: 10px 0;
+	list-style: none;
+}
+
+/* System Error Messages */
+#system-message dd.error ul {
+	color: #c00;
+	background: #E6C0C0 url(../../system/images/notice-alert.png) 4px center no-repeat;
+	border-top: 3px solid #DE7A7B;
+	border-bottom: 3px solid #DE7A7B;
+	margin: 0px;
+	padding-left: 40px;
+	text-indent: 0px;
+}
+
+/* System Notice Messages */
+#system-message dd.notice ul {
+	color: #c00;
+	background: #EFE7B8 url(../../system/images/notice-note.png) 4px center no-repeat;
+	border-top: 3px solid #F0DC7E;
+	border-bottom: 3px solid #F0DC7E;
+	margin: 0px;
+	padding-left: 40px;
+	text-indent: 0px;
+}
+
+#topmenu ul.mod-menu {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#topmenu ul.mod-menu li {
+	list-style: none;
+	display: inline-block;
+}
+
+#topmenu ul.mod-menu li.active a {
+	color: #d74a46;
+}
+
+#topmenu .btn-link,
+#topmenu #tip-1 {
+	display: none;
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="4.0" method="upgrade">
+    <name>com_atelman</name>
+    <creationDate>2025-10-02</creationDate>
+    <copyright>2025 iFoundries</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>iFoundries</author>
+    <authorEmail>wpsub@ifoundries.com</authorEmail>
+    <authorUrl>http://</authorUrl>
+    <version>CVS: 1.0.0</version>
+    <description></description>
+    <namespace path="src">Atelman\Component\Atelman</namespace>
+    
+    <scriptfile>script.php</scriptfile>
+    
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update> <!-- Runs on update -->
+        <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+        </schemas>
+    </update>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    
+
+    <files folder="site">
+        <folder>src</folder>
+        <folder>forms</folder>
+        <folder>tmpl</folder>
+    </files>
+    <media destination="com_atelman" folder="media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+    <languages folder="site/languages">
+        
+			<language tag="en-GB">en-GB/com_atelman.ini</language>
+    </languages>
+    <administration>
+        <menu>COM_ATELMAN</menu>
+        <submenu>
+            
+			<menu link="option=com_atelman&amp;view=countries" view="countries" alt="Atelman/Countries">Country Management</menu>
+			<menu link="option=com_atelman&amp;view=products" view="products" alt="Atelman/Products">Product</menu>
+			<menu link="option=com_atelman&amp;view=logs" view="logs" alt="Atelman/Logs">COM_ATELMAN_TITLE_LOGS</menu>
+			<menu link="option=com_atelman&amp;view=rmaitems" view="rmaitems" alt="Atelman/Rmaitems">COM_ATELMAN_TITLE_RMAITEMS</menu>
+			<menu link="option=com_atelman&amp;view=rmarequests" view="rmarequests" alt="Atelman/Rmarequests">COM_ATELMAN_TITLE_RMAREQUESTS</menu>
+			<menu link="option=com_atelman&amp;view=servicecontracts" view="servicecontracts" alt="Atelman/Servicecontracts">COM_ATELMAN_TITLE_SERVICECONTRACTS</menu>
+			<menu link="option=com_atelman&amp;view=warrantyitems" view="warrantyitems" alt="Atelman/Warrantyitems">COM_ATELMAN_TITLE_WARRANTYITEMS</menu>
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+        <languages folder="administrator/languages">
+            
+			<language tag="en-GB">en-GB/com_atelman.ini</language>
+			<language tag="en-GB">en-GB/com_atelman.sys.ini</language>
+        </languages>
+    </administration>
+    <config>
+        <fields name="params">
+            <fieldset name="component">
+                <field name="save_history" default="0" />
+            </fieldset>
+        </fields>
+    </config>
+    <plugins>
+		<plugin group="finder" plugin="atelmanrmaitems"/>
+    </plugins>
+    
+
+    <updateservers>
+        <server type="extension" priority="1" name="com_atelman">https://nocdn.component-creator.com/index.php?task=builder.preupdatecheckhook&amp;option=com_combuilder&amp;component=NzcwMTktMjE2Mjc2</server>
+    </updateservers>
+</extension>
+<!-- Component built by the Joomla Component Creator -->
+<!-- http://www.component-creator.com/ -->

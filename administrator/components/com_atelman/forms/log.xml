@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Atelman\Component\Atelman\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="section" type="text" label="COM_ATELMAN_FORM_LBL_LOG_SECTION" description="COM_ATELMAN_FORM_DESC_LOG_SECTION" hint="COM_ATELMAN_FORM_LBL_LOG_SECTION"/>
+    <field name="action_type" type="text" label="COM_ATELMAN_FORM_LBL_LOG_ACTION_TYPE" description="COM_ATELMAN_FORM_DESC_LOG_ACTION_TYPE" hint="COM_ATELMAN_FORM_LBL_LOG_ACTION_TYPE"/>
+    <field name="action_by" label="COM_ATELMAN_FORM_LBL_LOG_ACTION_BY" description="COM_ATELMAN_FORM_DESC_LOG_ACTION_BY" hint="COM_ATELMAN_FORM_LBL_LOG_ACTION_BY"/>
+    <field name="which_id" label="COM_ATELMAN_FORM_LBL_LOG_WHICH_ID" description="COM_ATELMAN_FORM_DESC_LOG_WHICH_ID" hint="COM_ATELMAN_FORM_LBL_LOG_WHICH_ID"/>
+    <field name="remarks" type="textarea" label="COM_ATELMAN_FORM_LBL_LOG_REMARKS" description="COM_ATELMAN_FORM_DESC_LOG_REMARKS" hint="COM_ATELMAN_FORM_LBL_LOG_REMARKS"/>
+    <field name="before_update" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_LOG_BEFORE_UPDATE" description="COM_ATELMAN_FORM_DESC_LOG_BEFORE_UPDATE" hint="COM_ATELMAN_FORM_LBL_LOG_BEFORE_UPDATE"/>
+    <field name="after_update" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_LOG_AFTER_UPDATE" description="COM_ATELMAN_FORM_DESC_LOG_AFTER_UPDATE" hint="COM_ATELMAN_FORM_LBL_LOG_AFTER_UPDATE"/>
+    <field name="action_date" default="CURRENT_TIMESTAMP" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_LOG_ACTION_DATE" description="COM_ATELMAN_FORM_DESC_LOG_ACTION_DATE" hint="COM_ATELMAN_FORM_LBL_LOG_ACTION_DATE"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>

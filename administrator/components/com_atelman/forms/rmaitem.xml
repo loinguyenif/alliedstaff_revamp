@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Atelman\Component\Atelman\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>
+    <field name="rma_request_id" label="COM_ATELMAN_FORM_LBL_RMAITEM_RMA_REQUEST_ID" description="COM_ATELMAN_FORM_DESC_RMAITEM_RMA_REQUEST_ID" hint="COM_ATELMAN_FORM_LBL_RMAITEM_RMA_REQUEST_ID"/>
+    <field name="rmacode" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_RMACODE" description="COM_ATELMAN_FORM_DESC_RMAITEM_RMACODE" hint="COM_ATELMAN_FORM_LBL_RMAITEM_RMACODE"/>
+    <field name="warranty_item_id" label="COM_ATELMAN_FORM_LBL_RMAITEM_WARRANTY_ITEM_ID" description="COM_ATELMAN_FORM_DESC_RMAITEM_WARRANTY_ITEM_ID" hint="COM_ATELMAN_FORM_LBL_RMAITEM_WARRANTY_ITEM_ID"/>
+    <field name="product_id" label="COM_ATELMAN_FORM_LBL_RMAITEM_PRODUCT_ID" description="COM_ATELMAN_FORM_DESC_RMAITEM_PRODUCT_ID" hint="COM_ATELMAN_FORM_LBL_RMAITEM_PRODUCT_ID"/>
+    <field name="customer_id" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_CUSTOMER_ID" description="COM_ATELMAN_FORM_DESC_RMAITEM_CUSTOMER_ID" hint="COM_ATELMAN_FORM_LBL_RMAITEM_CUSTOMER_ID"/>
+    <field name="requested_sn" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_REQUESTED_SN" description="COM_ATELMAN_FORM_DESC_RMAITEM_REQUESTED_SN" hint="COM_ATELMAN_FORM_LBL_RMAITEM_REQUESTED_SN"/>
+    <field name="replacement_pn" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_REPLACEMENT_PN" description="COM_ATELMAN_FORM_DESC_RMAITEM_REPLACEMENT_PN" hint="COM_ATELMAN_FORM_LBL_RMAITEM_REPLACEMENT_PN"/>
+    <field name="replacement_sn" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_REPLACEMENT_SN" description="COM_ATELMAN_FORM_DESC_RMAITEM_REPLACEMENT_SN" hint="COM_ATELMAN_FORM_LBL_RMAITEM_REPLACEMENT_SN"/>
+    <field name="warranty_status" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_WARRANTY_STATUS" description="COM_ATELMAN_FORM_DESC_RMAITEM_WARRANTY_STATUS" hint="COM_ATELMAN_FORM_LBL_RMAITEM_WARRANTY_STATUS"/>
+    <field name="description" type="textarea" label="COM_ATELMAN_FORM_LBL_RMAITEM_DESCRIPTION" description="COM_ATELMAN_FORM_DESC_RMAITEM_DESCRIPTION" hint="COM_ATELMAN_FORM_LBL_RMAITEM_DESCRIPTION"/>
+    <field name="status" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_STATUS" description="COM_ATELMAN_FORM_DESC_RMAITEM_STATUS" hint="COM_ATELMAN_FORM_LBL_RMAITEM_STATUS"/>
+    <field name="shipping_duration" label="COM_ATELMAN_FORM_LBL_RMAITEM_SHIPPING_DURATION" description="COM_ATELMAN_FORM_DESC_RMAITEM_SHIPPING_DURATION" hint="COM_ATELMAN_FORM_LBL_RMAITEM_SHIPPING_DURATION"/>
+    <field name="so_no" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_SO_NO" description="COM_ATELMAN_FORM_DESC_RMAITEM_SO_NO" hint="COM_ATELMAN_FORM_LBL_RMAITEM_SO_NO"/>
+    <field name="invoice_no" type="text" label="COM_ATELMAN_FORM_LBL_RMAITEM_INVOICE_NO" description="COM_ATELMAN_FORM_DESC_RMAITEM_INVOICE_NO" hint="COM_ATELMAN_FORM_LBL_RMAITEM_INVOICE_NO"/>
+    <field name="remarks" type="textarea" label="COM_ATELMAN_FORM_LBL_RMAITEM_REMARKS" description="COM_ATELMAN_FORM_DESC_RMAITEM_REMARKS" hint="COM_ATELMAN_FORM_LBL_RMAITEM_REMARKS"/>
+    <field name="replacement_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_RMAITEM_REPLACEMENT_DATE" description="COM_ATELMAN_FORM_DESC_RMAITEM_REPLACEMENT_DATE" hint="COM_ATELMAN_FORM_LBL_RMAITEM_REPLACEMENT_DATE"/>
+    <field name="rma_assigned_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_RMAITEM_RMA_ASSIGNED_DATE" description="COM_ATELMAN_FORM_DESC_RMAITEM_RMA_ASSIGNED_DATE" hint="COM_ATELMAN_FORM_LBL_RMAITEM_RMA_ASSIGNED_DATE"/>
+    <field name="received_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_RMAITEM_RECEIVED_DATE" description="COM_ATELMAN_FORM_DESC_RMAITEM_RECEIVED_DATE" hint="COM_ATELMAN_FORM_LBL_RMAITEM_RECEIVED_DATE"/>
+    <field name="shipped_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_RMAITEM_SHIPPED_DATE" description="COM_ATELMAN_FORM_DESC_RMAITEM_SHIPPED_DATE" hint="COM_ATELMAN_FORM_LBL_RMAITEM_SHIPPED_DATE"/>
+    <field name="closed_date" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_RMAITEM_CLOSED_DATE" description="COM_ATELMAN_FORM_DESC_RMAITEM_CLOSED_DATE" hint="COM_ATELMAN_FORM_LBL_RMAITEM_CLOSED_DATE"/>
+    <field name="created_date" default="CURRENT_TIMESTAMP" class="inputbox" format="%Y-%m-%d" translateformat="false" showtime="false" singleheader="false" todaybutton="false" weeknumbers="false" filltable="false" type="calendar" label="COM_ATELMAN_FORM_LBL_RMAITEM_CREATED_DATE" description="COM_ATELMAN_FORM_DESC_RMAITEM_CREATED_DATE" hint="COM_ATELMAN_FORM_LBL_RMAITEM_CREATED_DATE"/>
+    <field name="is_import_csv" label="COM_ATELMAN_FORM_LBL_RMAITEM_IS_IMPORT_CSV" description="COM_ATELMAN_FORM_DESC_RMAITEM_IS_IMPORT_CSV" hint="COM_ATELMAN_FORM_LBL_RMAITEM_IS_IMPORT_CSV"/>
+    <field name="created_by" type="createdby" default="0" label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_DESC" hint="COM_ATELMAN_FORM_LBL_RMAITEM_CREATED_BY"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>
