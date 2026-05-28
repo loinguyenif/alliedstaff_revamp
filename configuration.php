@@ -15,9 +15,9 @@ class JConfig {
 	public $debug_lang_const = true;
 	public $dbtype = 'mysqli';
 	public $host = 'localhost';
-	public $user = 'appdev';
-	public $password = 'Yytzvx3oDt6kLtL';
-	public $db = 'appdev_allied_revamp';
+	public $user = 'root';
+	public $password = '';
+	public $db = 'teg_alliedstaff_revamp';
 	public $dbprefix = 'atel_';
 	public $dbencryption = 0;
 	public $dbsslverifyservercert = false;

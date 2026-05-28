@@ -1,108 +1,187 @@
 <?php
-
 define('_JEXEC', 1);
-define('JPATH_BASE', dirname(__FILE__));
-define('DS', DIRECTORY_SEPARATOR);
+define('JPATH_BASE', __DIR__);
 
-use \Joomla\CMS\Factory;
-//setlocale(LC_ALL, 'en_US.UTF-8');	
+require_once JPATH_BASE . '/includes/defines.php';
+require_once JPATH_BASE . '/includes/framework.php';
+
+// Boot the DI container
+$container = \Joomla\CMS\Factory::getContainer();
+$container->alias('session.web', 'session.web.site')
+    ->alias('session', 'session.web.site')
+    ->alias('JSession', 'session.web.site')
+    ->alias(\Joomla\CMS\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
+
+// Instantiate the application.
+$app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+\Joomla\CMS\Factory::$application = $app;
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Mail\MailHelper;
+
+
 date_default_timezone_set('Singapore');
 set_time_limit(0);
+$db  = Factory::getDbo();
 
-/*$pass = $_GET['pass'];
-		$username = $_GET['user'];
-		
-		$username 	= 	'admin';
-		$pass		= 	'12345';
-	*/
-/* Credentials */
-//if($username != 'admin') return;
-//if($pass != '12345') return;
+/* Export File */
+$exportPath = JPATH_BASE . '/atrmaftp';
 
-
-require_once(JPATH_BASE . '/includes/defines.php');
-require_once(JPATH_BASE . '/includes/framework.php');
-$mainframe = Factory::getApplication('site');
-
-jimport('joomla.mail.mail');
-
-$db = Factory::getDBO();
-
-
-$fp = fopen(dirname(__FILE__) . '/atrmaftp/RMA_' . date("dmYHi") . '.csv', "w");
-
-/*$query = " SELECT r.*, p.product_no FROM #__at_rma_items AS r "
-	.	" LEFT JOIN #__at_products AS p ON p.id = r.product_id "
-	.	" WHERE DATE(r.created_date) = CURDATE() ";*/
-
-$query = " SELECT r.*, p.product_no FROM #__at_rma_items AS r "
-	.	" LEFT JOIN #__at_products AS p ON p.id = r.product_id "
-	.	" WHERE r.created_date <= NOW() AND r.created_date >= '2017-10-04' AND r.created_date < '2017-10-07'; ";
-
-$db->setQuery($query);
-$rma_items = $db->loadObjectList();
-
-$listarray = array();
-$listarray[] = array("RMA Nbr", "Requested S/N", "Customer", "Ship-To", "Order Date", "Item Nbr", "Quantity", "Problem", "Warranty");
-
-if (!empty($rma_items)) {
-	foreach ($rma_items as $rma_item) {
-		$rma1 = $rma_item->rmacode; // RMA Number
-		$rma2 = $rma_item->customer_id; // Customer ID
-		$rma3 = $rma_item->customer_id; // Ship To - Customer ID
-		$rma4 = date("d-m-Y", strtotime($rma_item->created_date)); // Order / Created Date
-		$rma5 = $rma_item->product_no; // Model No.
-		$rma6 = 1; // Quantity
-		$rma7 = $rma_item->description; // Description the Problem
-		$rma8 = (($rma_item->warranty_status == 'DOA') ? 'IN' : $rma_item->warranty_status); // Warranty
-		$rma9 = $rma_item->requested_sn; // Serial No.
-
-		$itm = array($rma1, $rma9, $rma2, $rma3, $rma4, $rma5, $rma6, $rma7, $rma8);
-		$listarray[] = $itm;
-	}
+if (!is_dir($exportPath)) {
+    mkdir($exportPath, 0755, true);
 }
 
-foreach ($listarray as $fields) {
-	fputcsv($fp, $fields);
+$fileName = 'RMA_' . date('dmYHi') . '.csv';
+$filePath = $exportPath . '/' . $fileName;
+
+/* Open CSV */
+$fp = fopen($filePath, 'w');
+
+if (!$fp) {
+    die('Unable to create CSV file');
+}
+
+/* CSV Header */
+$headers = [
+    'RMA Nbr',
+    'Requested S/N',
+    'Customer',
+    'Ship-To',
+    'Order Date',
+    'Item Nbr',
+    'Quantity',
+    'Problem',
+    'Warranty'
+];
+
+fputcsv($fp, $headers);
+
+/* Get RMA Items */
+$query = $db->getQuery(true)
+    ->select([
+        'r.*',
+        'p.product_no'
+    ])
+    ->from('#__at_rma_items AS r')
+    ->leftJoin('#__at_products AS p ON p.id = r.product_id')
+    ->where("r.created_date >= '2017-10-04'")
+    ->where("r.created_date < '2017-10-07'")
+    ->order('r.created_date ASC');
+
+$db->setQuery($query);
+
+$rmaItems = $db->loadObjectList();
+
+$totalExported = 0;
+$tableRows     = '';
+
+if (!empty($rmaItems)) {
+
+    foreach ($rmaItems as $item) {
+
+        $warrantyStatus =
+            ($item->warranty_status === 'DOA')
+            ? 'IN'
+            : $item->warranty_status;
+
+        $row = [
+            $item->rmacode,
+            $item->requested_sn,
+            $item->customer_id,
+            $item->customer_id,
+            date('d-m-Y', strtotime($item->created_date)),
+            $item->product_no,
+            1,
+            $item->description,
+            $warrantyStatus
+        ];
+
+        /* Write CSV */
+        fputcsv($fp, $row);
+
+        /* Email Table */
+        $tableRows .= '<tr>';
+
+        foreach ($row as $col) {
+            $tableRows .= '<td>'
+                . htmlspecialchars((string) $col)
+                . '</td>';
+        }
+
+        $tableRows .= '</tr>';
+
+        $totalExported++;
+    }
 }
 
 fclose($fp);
 
-// mail the condition of process
-$body = '';
-$body .= '<html><body>';
-$body .= '<div style="margin-bottom:20px;">Today RMA Creation : ' . date("d-m-Y") . '</div>';
-$body .= '<table border="1">';
-$body .= '<tr>';
-foreach ($listarray[0] as $tmp) {
-	$body .= '<td><strong>' . $tmp . '</strong></td>';
-}
-$body .= '</tr>';
-unset($listarray[0]);
+/* Email Body */
+$body = '
+<html>
+<body>
 
+<h3>RMA Export Completed</h3>
+<p>Date: <strong>' . date('d-m-Y H:i:s') . '</strong></p>
+<p>Total Exported: <strong>' . $totalExported . '</strong></p>
 
-foreach ($listarray as $data) {
-	$body .= '<tr>';
-	foreach ($data as $tmp) {
-		$body .= '<td>' . $tmp . '</td>';
-	}
-	$body .= '</tr>';
+<table border="1" cellpadding="5" cellspacing="0">
+    <tr>';
+
+foreach ($headers as $header) {
+
+    $body .= '<th>'
+        . htmlspecialchars($header)
+        . '</th>';
 }
 
-$body .= '</table>';
-$body .= '</body></html>';
+$body .= '
+    </tr>
+    ' . $tableRows . '
+</table>
+
+</body>
+</html>';
+
+/* Output */
 echo $body;
 
-$mail = Factory::getMailer();
-//$mail->IsMail();
-$mail->isHTML(true);
-$mail->addRecipient(array('ata-webadmin@alliedtelesis.com.sg', 'Amy.Tchin@alliedtelesis.com.sg'));
-//$mail->addRecipient(array('ajunizar@gmail.com'));
-$mail->addBCC(array('andreas@ifoundries.com'));
-//$mail->addReplyTo(array('andreas@ifoundries.com', 'Adminme'));
-//$mail->setSender( array( 'andreas@ifoundries.com', 'Me' ) );
-$mail->setSubject('Allied Telesis : Today RMA Creation was Running');
-//$mail->AddEmbeddedImage( JPATH_SITE.DS.'templates'.DS.'mapsearch'.DS.'images'.DS.'logo_100.png', 'logo_id', 'logo.png', 'base64', 'image/png' );
-$mail->setBody($body);
+/* Send Email */
+try {
 
-$sent = $mail->Send();
+    $mail = Factory::getMailer();
+
+    $mail->isHtml(true);
+
+    $mail->addRecipient([
+        'ata-webadmin@alliedtelesis.com.sg',
+        'Amy.Tchin@alliedtelesis.com.sg'
+    ]);
+
+    $mail->addBcc([
+        'meibin20032002@gmail.com'
+    ]);
+
+    $mail->setSubject(
+        'Allied Telesis : RMA Export Completed'
+    );
+
+    $mail->setBody($body);
+
+    /* Attach CSV */
+    if (file_exists($filePath)) {
+        $mail->addAttachment($filePath);
+    }
+
+    $mail->send();
+
+    echo '<p><strong>Email Sent Successfully</strong></p>';
+
+} catch (Exception $e) {
+
+    echo '<p><strong>Email Error:</strong> '
+        . htmlspecialchars($e->getMessage())
+        . '</p>';
+}

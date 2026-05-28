@@ -1,19 +1,29 @@
 <?php
-
 define('_JEXEC', 1);
-define('JPATH_BASE', dirname(__FILE__));
+define('JPATH_BASE', __DIR__);
+
+require_once JPATH_BASE . '/includes/defines.php';
+require_once JPATH_BASE . '/includes/framework.php';
+
+// Boot the DI container
+$container = \Joomla\CMS\Factory::getContainer();
+$container->alias('session.web', 'session.web.site')
+    ->alias('session', 'session.web.site')
+    ->alias('JSession', 'session.web.site')
+    ->alias(\Joomla\CMS\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
+
+// Instantiate the application.
+$app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+\Joomla\CMS\Factory::$application = $app;
 
 use \Joomla\CMS\Factory;
 use Joomla\CMS\User\UserHelper;
 //setlocale(LC_ALL, 'en_US.UTF-8');	
 date_default_timezone_set('Singapore');
 set_time_limit(0);
-
-require_once(JPATH_BASE . '/includes/defines.php');
-require_once(JPATH_BASE . '/includes/framework.php');
-$mainframe = Factory::getApplication('site');
-
-$db = Factory::getDBO();
+$db = Factory::getDbo();
 
 $query = " SELECT i.id, i.customer_id, i.purchase_date , i.expired_date_manual , i.extended_warranty, u.is_internal, p.warranty, p.is_previous3years FROM #__at_warranty_items AS i "
 	.	" LEFT JOIN #__at_products AS p ON i.product_id = p.id "
@@ -36,7 +46,7 @@ if (!empty($rows)) {
 		if ($r->is_internal == 1) {
 
 			/* Expired Date - must see from #__at_products */
-			$tmp = split('-', $r->purchase_date); // Y - m - d
+			$tmp = explode('-', $r->purchase_date); // Y - m - d
 
 			$day 	= 	$tmp[2] - 1;
 			$month 	= 	$tmp[1] + 12;
@@ -99,6 +109,7 @@ if (!empty($rows)) {
 		$db->setQuery($query);
 		$db->execute();
 	}
+	echo 'Warranty Registration updated successfully.';
 } else {
-	echo 'No Warranty Registration';
+	echo 'No Warranty Registration found.';
 }

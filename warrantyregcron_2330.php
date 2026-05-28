@@ -27,6 +27,7 @@ set_time_limit(0);
 $db = Factory::getDbo();
 
 $image_file_path = JPATH_SITE . '/atelftp';
+
 if (!is_dir($image_file_path)) {
     die("Wrong path: {$image_file_path}");
 }
@@ -40,8 +41,6 @@ $total_item_not_inserted = 0;
 
 $customer_row = [];
 $total_customer_created = 0;
-
-$product_added_array = [];
 
 while (false !== ($entry = $d->read())) {
 
@@ -75,13 +74,10 @@ while (false !== ($entry = $d->read())) {
 
             if (!$warranty_id) {
 
-                $columns = ['first_name'];
-                $values = [$db->quote($entry)];
-
                 $query = $db->getQuery(true)
                     ->insert($db->quoteName('#__at_warranty_register'))
-                    ->columns($db->quoteName($columns))
-                    ->values(implode(',', $values));
+                    ->columns($db->quoteName(['first_name']))
+                    ->values($db->quote($entry));
 
                 $db->setQuery($query);
                 $db->execute();
@@ -119,7 +115,10 @@ while (false !== ($entry = $d->read())) {
 
                 // Product lookup
                 $query = $db->getQuery(true)
-                    ->select(['id', 'warranty'])
+                    ->select([
+                        $db->quoteName('id'),
+                        $db->quoteName('warranty')
+                    ])
                     ->from($db->quoteName('#__at_products'))
                     ->where($db->quoteName('product_no') . ' = ' . $db->quote($part_no));
 
@@ -128,38 +127,49 @@ while (false !== ($entry = $d->read())) {
                 $tmpproducts = $db->loadObject();
 
                 $product_id = $tmpproducts->id ?? 0;
-                $warranty_month = $tmpproducts->warranty ?? 60;
+                $warranty_month = $tmpproducts->warranty ?? 0;
 
-                // Create product if not exists
-                if (empty($product_id)) {
+                // Product not found
+                if (!$product_id) {
 
-                    $product_added_array[] = $part_no;
+                    $error_text = 'Product not found';
 
-                    $query = $db->getQuery(true)
-                        ->insert($db->quoteName('#__at_products'))
-                        ->columns([
-                            $db->quoteName('product_no'),
-                            $db->quoteName('model_no'),
-                            $db->quoteName('warranty')
-                        ])
-                        ->values(
-                            implode(',', [
-                                $db->quote($part_no),
-                                $db->quote($model_no),
-                                $db->quote($warranty_month)
-                            ])
-                        );
+                    $error_row[] =
+                        $customer_id . "|" .
+                        $po_no . "|" .
+                        $so_no . "|" .
+                        $invoice_no . "|" .
+                        $part_no . "|" .
+                        $model_no . "|" .
+                        $serial_no . "|" .
+                        $pdate . "|" .
+                        $error_text;
 
-                    $db->setQuery($query);
-                    $db->execute();
+                    $total_item_not_inserted++;
 
-                    $product_id = $db->insertid();
+                    continue;
                 }
 
                 // Date processing
                 $tmp = explode('/', $pdate);
 
                 if (count($tmp) !== 3) {
+
+                    $error_text = 'Invalid Purchase Date Format';
+
+                    $error_row[] =
+                        $customer_id . "|" .
+                        $po_no . "|" .
+                        $so_no . "|" .
+                        $invoice_no . "|" .
+                        $part_no . "|" .
+                        $model_no . "|" .
+                        $serial_no . "|" .
+                        $pdate . "|" .
+                        $error_text;
+
+                    $total_item_not_inserted++;
+
                     continue;
                 }
 
@@ -173,6 +183,10 @@ while (false !== ($entry = $d->read())) {
                 $extended_expired_date = date("Y-m-d", mktime(0, 0, 0, ($month + $extended_warranty), $day, $year));
 
                 // Check customer
+                // NOTE:
+                // customer_id column may not exist in Joomla 5 users table
+                // Using username instead
+
                 $query = $db->getQuery(true)
                     ->select($db->quoteName('id'))
                     ->from($db->quoteName('#__users'))
@@ -182,7 +196,7 @@ while (false !== ($entry = $d->read())) {
 
                 $customer_exist = $db->loadResult();
 
-                // Create user
+                // Create user if not exists
                 if (!$customer_exist) {
 
                     $email = $customer_id . '@atg.lc';
@@ -201,16 +215,47 @@ while (false !== ($entry = $d->read())) {
 
                     $user = new User;
 
-                    if ($user->bind($userData)) {
+                    if (!$user->bind($userData)) {
 
-                        if ($user->save()) {
+                        $error_text = 'User bind failed';
 
-                            $customer_row[] = $customer_id;
-                            $total_customer_created++;
+                        $error_row[] =
+                            $customer_id . "|" .
+                            $po_no . "|" .
+                            $so_no . "|" .
+                            $invoice_no . "|" .
+                            $part_no . "|" .
+                            $model_no . "|" .
+                            $serial_no . "|" .
+                            $pdate . "|" .
+                            $error_text;
 
-                            $customer_exist = $user->id;
-                        }
+                        continue;
                     }
+
+                    if (!$user->save()) {
+
+                        $error_text = 'User save failed';
+
+                        $error_row[] =
+                            $customer_id . "|" .
+                            $po_no . "|" .
+                            $so_no . "|" .
+                            $invoice_no . "|" .
+                            $part_no . "|" .
+                            $model_no . "|" .
+                            $serial_no . "|" .
+                            $pdate . "|" .
+                            $error_text;
+
+                        continue;
+                    }
+
+                    $customer_row[] = $customer_id;
+
+                    $total_customer_created++;
+
+                    $customer_exist = $user->id;
                 }
 
                 // Check existing warranty item
@@ -224,7 +269,9 @@ while (false !== ($entry = $d->read())) {
                         $db->quoteName('serial_no_2') . ' = ' . $db->quote($serial_no)
                         . ')'
                     )
-                    ->where($db->quoteName('so_no') . ' = ' . $db->quote($so_no));
+                    ->where(
+                        $db->quoteName('so_no') . ' = ' . $db->quote($so_no)
+                    );
 
                 $db->setQuery($query);
 
@@ -273,79 +320,18 @@ while (false !== ($entry = $d->read())) {
 
                 } else {
 
-                    if ($invoice_no) {
+                    $error_text = 'SO Number and Serial Number exist';
 
-                        $query = $db->getQuery(true)
-                            ->select($db->quoteName('id'))
-                            ->from($db->quoteName('#__at_warranty_items'))
-                            ->where(
-                                '(' .
-                                $db->quoteName('serial_no') . ' = ' . $db->quote($serial_no)
-                                . ' OR ' .
-                                $db->quoteName('serial_no_2') . ' = ' . $db->quote($serial_no)
-                                . ')'
-                            )
-                            ->where($db->quoteName('so_no') . ' = ' . $db->quote($so_no))
-                            ->where($db->quoteName('invoice_no') . ' = ' . $db->quote($invoice_no));
-
-                        $db->setQuery($query);
-
-                        $row_exist = $db->loadResult();
-
-                        if (!$row_exist) {
-
-                            $query = $db->getQuery(true)
-                                ->update($db->quoteName('#__at_warranty_items'))
-                                ->set(
-                                    $db->quoteName('invoice_no')
-                                    . ' = '
-                                    . $db->quote($invoice_no)
-                                )
-                                ->where(
-                                    '(' .
-                                    $db->quoteName('serial_no') . ' = ' . $db->quote($serial_no)
-                                    . ' OR ' .
-                                    $db->quoteName('serial_no_2') . ' = ' . $db->quote($serial_no)
-                                    . ')'
-                                )
-                                ->where($db->quoteName('so_no') . ' = ' . $db->quote($so_no));
-
-                            $db->setQuery($query);
-                            $db->execute();
-
-                            $total_item_invoice_updated++;
-
-                        } else {
-
-                            $error_text = 'Invoice Number exists for these SO Number and Serial Number';
-
-                            $error_row[] =
-                                $customer_id . "|" .
-                                $po_no . "|" .
-                                $so_no . "|" .
-                                $invoice_no . "|" .
-                                $part_no . "|" .
-                                $model_no . "|" .
-                                $serial_no . "|" .
-                                $pdate . "|" .
-                                $error_text;
-                        }
-
-                    } else {
-
-                        $error_text = 'SO Number and Serial Number exist';
-
-                        $error_row[] =
-                            $customer_id . "|" .
-                            $po_no . "|" .
-                            $so_no . "|" .
-                            $invoice_no . "|" .
-                            $part_no . "|" .
-                            $model_no . "|" .
-                            $serial_no . "|" .
-                            $pdate . "|" .
-                            $error_text;
-                    }
+                    $error_row[] =
+                        $customer_id . "|" .
+                        $po_no . "|" .
+                        $so_no . "|" .
+                        $invoice_no . "|" .
+                        $part_no . "|" .
+                        $model_no . "|" .
+                        $serial_no . "|" .
+                        $pdate . "|" .
+                        $error_text;
 
                     $total_item_not_inserted++;
                 }
@@ -353,60 +339,55 @@ while (false !== ($entry = $d->read())) {
 
             fclose($handle);
 
-            // Optional
+            // Optional:
             // unlink($file);
 
-            // Email report
+            // Build email report
             $body = '';
+
             $body .= '<html><body>';
-            $body .= '<div style="margin-bottom:20px;">Warranty Registration Automation Script was Running</div>';
+
+            $body .= '<div style="margin-bottom:20px;">';
+            $body .= 'Warranty Registration Automation Script was Running';
+            $body .= '</div>';
 
             if ($total_customer_created > 0) {
-                $body .= '<div style="margin-bottom:20px"><strong>'
-                    . $total_customer_created
-                    . '</strong> Customer created : <br /><strong>'
-                    . implode(',', $customer_row)
-                    . '</strong></div>';
-            }
 
-            if (!empty($product_added_array)) {
-                $body .= '<div style="margin-bottom:20px"><strong>'
-                    . count($product_added_array)
-                    . '</strong> Product created : <br /><strong>'
-                    . implode(', ', $product_added_array)
-                    . '</strong></div>';
-            }
-
-            if ($total_item_invoice_updated > 0) {
-                $body .= '<div style="margin-bottom:20px">Total Items that were invoiced: <strong>'
-                    . $total_item_invoice_updated
-                    . '</strong></div>';
+                $body .= '<div style="margin-bottom:20px">';
+                $body .= 'Customer created are <strong>';
+                $body .= implode(',', $customer_row);
+                $body .= '</strong></div>';
             }
 
             if ($error_row) {
 
-                $body .= '<div style="margin-bottom:20px;">Oops, there were some errors during import.</div>';
+                $body .= '<div style="margin-bottom:20px;">';
+                $body .= 'Oops, there were some errors during import.';
+                $body .= '</div>';
 
-                $body .= '<div style="margin-bottom:5px;">Total Items Imported: <strong>'
-                    . $total_items
-                    . '</strong></div>';
+                $body .= '<div style="margin-bottom:5px;">';
+                $body .= 'Total Items that were imported: <strong>';
+                $body .= $total_items;
+                $body .= '</strong></div>';
 
-                $body .= '<div style="margin-bottom:20px;">Total Items NOT Imported: <strong>'
-                    . $total_item_not_inserted
-                    . '</strong></div>';
+                $body .= '<div style="margin-bottom:20px;">';
+                $body .= 'Total Items that were NOT imported: <strong>';
+                $body .= $total_item_not_inserted;
+                $body .= '</strong></div>';
 
                 $body .= '<table border="1" cellpadding="5" cellspacing="0">';
-                $body .= '<tr>
-                    <th>Customer ID</th>
-                    <th>PO No.</th>
-                    <th>SO No.</th>
-                    <th>Invoice No.</th>
-                    <th>Part No.</th>
-                    <th>Model No.</th>
-                    <th>Serial No.</th>
-                    <th>Purchase Date</th>
-                    <th>Note</th>
-                </tr>';
+
+                $body .= '<tr>';
+                $body .= '<th>Customer ID</th>';
+                $body .= '<th>PO No.</th>';
+                $body .= '<th>SO No.</th>';
+                $body .= '<th>Invoice No.</th>';
+                $body .= '<th>Part No.</th>';
+                $body .= '<th>Model No.</th>';
+                $body .= '<th>Serial No.</th>';
+                $body .= '<th>Purchase / Ship Date</th>';
+                $body .= '<th>Note</th>';
+                $body .= '</tr>';
 
                 foreach ($error_row as $erw) {
 
@@ -425,45 +406,44 @@ while (false !== ($entry = $d->read())) {
 
             } else {
 
-                $body .= '<div style="margin-bottom:20px">Total Items Imported: <strong>'
-                    . $total_items
-                    . '</strong></div>';
+                $body .= '<div style="margin-bottom:20px">';
+                $body .= 'All Items were imported. Total Items imported were <strong>';
+                $body .= $total_items;
+                $body .= '</strong></div>';
             }
 
             $body .= '</body></html>';
 
             echo $body;
 
-            $mail = Factory::getMailer();
-
-            $config = Factory::getConfig();
-
-            $mail->setSender([
-                $config->get('mailfrom'),
-                $config->get('fromname')
-            ]);
-
-            $mail->isHtml(true);
-
-            $mail->addRecipient([
-                'ata-webadmin@alliedtelesis.com.sg',
-                'Amy.Tchin@alliedtelesis.com.sg'
-            ]);
-
-            $mail->addBcc([
-                'meibin20032002@gmail.com'
-            ]);
-
-            $mail->setSubject(
-                'Allied Telesis : Warranty Registration Daily Automation was Running'
-            );
-
-            $mail->setBody($body);
-
+            // Send email
             try {
+
+                $mail = Factory::getMailer();
+
+                $mail->isHtml(true);
+
+                $mail->addRecipient([
+                    'ata-webadmin@alliedtelesis.com.sg'
+                ]);
+
+                $mail->addBcc([
+                    'meibin20032002@gmail.com'
+                ]);
+
+                $mail->setSubject(
+                    'Allied Telesis : Warranty Registration Daily Automation was Running'
+                );
+
+                $mail->setBody($body);
+
                 $mail->send();
+
             } catch (Exception $e) {
-                echo '<pre>Email Error: ' . $e->getMessage() . '</pre>';
+
+                echo '<pre>';
+                echo 'Mail Error: ' . $e->getMessage();
+                echo '</pre>';
             }
         }
     }

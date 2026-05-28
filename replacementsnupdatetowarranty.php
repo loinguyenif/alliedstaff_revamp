@@ -1,71 +1,141 @@
 <?php
-
 define('_JEXEC', 1);
-define('JPATH_BASE', dirname(__FILE__));
-define('DS', DIRECTORY_SEPARATOR);
+define('JPATH_BASE', __DIR__);
 
-use \Joomla\CMS\Factory;
-//setlocale(LC_ALL, 'en_US.UTF-8');	
+require_once JPATH_BASE . '/includes/defines.php';
+require_once JPATH_BASE . '/includes/framework.php';
+
+// Boot the DI container
+$container = \Joomla\CMS\Factory::getContainer();
+$container->alias('session.web', 'session.web.site')
+    ->alias('session', 'session.web.site')
+    ->alias('JSession', 'session.web.site')
+    ->alias(\Joomla\CMS\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
+
+// Instantiate the application.
+$app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+\Joomla\CMS\Factory::$application = $app;
+
+use Joomla\CMS\Factory;
+
 set_time_limit(0);
+$db  = Factory::getDbo();
 
-/*$pass = $_GET['pass'];
-		$username = $_GET['user'];
-		
-		$username 	= 	'admin';
-		$pass		= 	'12345';
-		
-		// Credentials
-		if($username != 'admin') return;
-		if($pass != '12345') return;
-	*/
-
-require_once(JPATH_BASE . '/includes/defines.php');
-require_once(JPATH_BASE . '/includes/framework.php');
-require_once(JPATH_BASE . '/libraries/joomla/user/helper.php');
-
-$mainframe = Factory::getApplication('site');
-
-$db = Factory::getDBO();
-
-// check whether Customer ID alreadyd exist, if exist, do not insert data into user db
-$query = " SELECT r.* FROM #__at_rma_items AS r "
-	.	" ORDER BY r.created_date ASC";
+/* Get all RMA items */
+$query = $db->getQuery(true)
+    ->select('r.*')
+    ->from('#__at_rma_items AS r')
+    ->order('r.created_date ASC');
 
 $db->setQuery($query);
-$rma_items = $db->loadObjectList();
 
-if (!empty($rma_items)) {
-	$i = 1;
-	$updated = 1;
-	$warranty_not_exist = 1;
-	$text = '';
-	foreach ($rma_items as $rma) {
+$rmaItems = $db->loadObjectList();
 
-		$replacement_sn 			= $rma->replacement_sn;
-		$replacement_pn 			= $rma->replacement_pn;
-		$requested_sn 				= $rma->requested_sn;
+$totalUpdated = 0;
+$totalNotFound = 0;
+$logs = [];
 
-		$query = " SELECT id FROM #__at_warranty_items WHERE serial_no = '$requested_sn' LIMIT 1 ";
-		$db->setQuery($query);
-		$warranty_item_id = $db->loadResult();
+if (!empty($rmaItems)) {
 
-		if ($warranty_item_id) {
+    $i = 1;
 
-			$query = " UPDATE #__at_warranty_items SET serial_no_2 = '$replacement_sn' , replacement_pn = '$replacement_pn' WHERE id = '$warranty_item_id' ";
-			$db->setQuery($query);
-			$db->query();
+    foreach ($rmaItems as $rma) {
 
-			$text .= $i . '. Warranty S/N : ' . $requested_sn . ' . Updated Replacement S/N : ' . ($replacement_sn ? $replacement_sn : '-') . ' (P/N : ' . ($replacement_pn ? $replacement_pn : '-') . ') (Created : ' . date("d-m-Y", strtotime($rma->created_date)) . ')<br /> ';
-			$updated++;
-		} else {
-			$text .= $i . '. (No update) Original S/N not exist in Warranty Registration Table: ' . $requested_sn . ' (Created : ' . date("d-m-Y", strtotime($rma->created_date)) . ')<br /> ';
-			$warranty_not_exist++;
-		}
+        $requestedSn   = trim($rma->requested_sn);
+        $replacementSn = trim($rma->replacement_sn);
+        $replacementPn = trim($rma->replacement_pn);
 
-		$i++;
-	}
+        /* Skip empty requested SN */
+        if (empty($requestedSn)) {
+            continue;
+        }
 
-	echo 'Updated : ' . $updated . '<br />';
-	echo 'Warranty Not Exist : ' . $warranty_not_exist . '<br />';
-	echo '<br />' . $text . '<br />';
+        /* Find warranty item */
+        $query = $db->getQuery(true)
+            ->select('id')
+            ->from('#__at_warranty_items')
+            ->where('serial_no = ' . $db->quote($requestedSn));
+
+        $db->setQuery($query);
+
+        $warrantyItemId = $db->loadResult();
+
+        if ($warrantyItemId) {
+
+            /* Update replacement info */
+            $fields = [
+                'serial_no_2 = ' . $db->quote($replacementSn),
+                'replacement_pn = ' . $db->quote($replacementPn)
+            ];
+
+            $query = $db->getQuery(true)
+                ->update('#__at_warranty_items')
+                ->set($fields)
+                ->where('id = ' . (int) $warrantyItemId);
+
+            try {
+
+                $db->setQuery($query);
+                $db->execute();
+
+                $logs[] =
+                    $i . '. Updated Warranty S/N: '
+                    . $requestedSn
+                    . ' → Replacement S/N: '
+                    . ($replacementSn ?: '-')
+                    . ' (P/N: '
+                    . ($replacementPn ?: '-')
+                    . ')';
+
+                $totalUpdated++;
+
+            } catch (Exception $e) {
+
+                $logs[] =
+                    $i . '. Error updating '
+                    . $requestedSn
+                    . ' : '
+                    . $e->getMessage();
+            }
+
+        } else {
+
+            $logs[] =
+                $i . '. Warranty not found for S/N: '
+                . $requestedSn;
+
+            $totalNotFound++;
+        }
+
+        $i++;
+    }
+}
+
+/* Output Result */
+echo '<h2>RMA Warranty Sync Completed</h2>';
+
+echo '<p>Total Updated: <strong>'
+    . $totalUpdated
+    . '</strong></p>';
+
+echo '<p>Total Warranty Not Found: <strong>'
+    . $totalNotFound
+    . '</strong></p>';
+
+if (!empty($logs)) {
+
+    echo '<h3>Logs</h3>';
+
+    echo '<ul>';
+
+    foreach ($logs as $log) {
+
+        echo '<li>'
+            . htmlspecialchars($log)
+            . '</li>';
+    }
+
+    echo '</ul>';
 }

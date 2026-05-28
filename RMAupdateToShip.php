@@ -1,29 +1,27 @@
 <?php
-
 define('_JEXEC', 1);
-define('JPATH_BASE', dirname(__FILE__));
+define('JPATH_BASE', __DIR__);
+
+require_once JPATH_BASE . '/includes/defines.php';
+require_once JPATH_BASE . '/includes/framework.php';
+
+// Boot the DI container
+$container = \Joomla\CMS\Factory::getContainer();
+$container->alias('session.web', 'session.web.site')
+    ->alias('session', 'session.web.site')
+    ->alias('JSession', 'session.web.site')
+    ->alias(\Joomla\CMS\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
+
+// Instantiate the application.
+$app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+\Joomla\CMS\Factory::$application = $app;
 
 use \Joomla\CMS\Factory;
-//setlocale(LC_ALL, 'en_US.UTF-8');	
+use Joomla\CMS\User\UserHelper;
+
 set_time_limit(0);
-
-/*$pass = $_GET['pass'];
-		$username = $_GET['user'];
-		
-		$username 	= 	'admin';
-		$pass		= 	'12345';
-		
-		// Credentials
-		if($username != 'admin') return;
-		if($pass != '12345') return;
-	*/
-
-require_once(JPATH_BASE . '/includes/defines.php');
-require_once(JPATH_BASE . '/includes/framework.php');
-require_once(JPATH_BASE . '/libraries/joomla/user/helper.php');
-
-$mainframe = Factory::getApplication('site');
-
 $db = Factory::getDBO();
 
 $image_file_path = JPATH_SITE . '/atelftp';
@@ -32,8 +30,7 @@ $d = dir($image_file_path) or die("Wrong path: $image_file_path");
 
 while (false !== ($entry = $d->read())) {
 
-	if ($entry != '.' && $entry != '..' && !is_dir($dir . $entry)) {
-
+	if ($entry != '.' && $entry != '..' && !is_dir($image_file_path . '/' . $entry)) {
 
 		/* check the CSV extensions */
 		if (!preg_match('/^srlrplnt\.csv$/i', $entry))
@@ -107,3 +104,4 @@ while (false !== ($entry = $d->read())) {
 }
 
 $d->close();
+echo 'RMA updated to shipped successfully.';

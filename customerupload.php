@@ -1,114 +1,220 @@
 <?php
+define('_JEXEC', 1);
+define('JPATH_BASE', __DIR__);
 
-use \Joomla\CMS\Factory;
+require_once JPATH_BASE . '/includes/defines.php';
+require_once JPATH_BASE . '/includes/framework.php';
+
+// Boot the DI container
+$container = \Joomla\CMS\Factory::getContainer();
+$container->alias('session.web', 'session.web.site')
+    ->alias('session', 'session.web.site')
+    ->alias('JSession', 'session.web.site')
+    ->alias(\Joomla\CMS\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\Session::class, 'session.web.site')
+    ->alias(\Joomla\Session\SessionInterface::class, 'session.web.site');
+
+// Instantiate the application.
+$app = $container->get(\Joomla\CMS\Application\SiteApplication::class);
+\Joomla\CMS\Factory::$application = $app;
+
+use Joomla\CMS\Factory;
 use Joomla\CMS\User\UserHelper;
 
-define('_JEXEC', 1);
-define('JPATH_BASE', dirname(__FILE__));
-set_time_limit(0);
+$db = Factory::getDbo();
 
-/*$pass = $_GET['pass'];
-		$username = $_GET['user'];
-		
-		$username 	= 	'admin';
-		$pass		= 	'12345';
-		
-		// Credentials
-		if($username != 'admin') return;
-		if($pass != '12345') return;
-	*/
+$csv_path = JPATH_SITE . '/atelftp';
 
-require_once(JPATH_BASE . '/includes/defines.php');
-require_once(JPATH_BASE . '/includes/framework.php');
-require_once(JPATH_BASE . '/libraries/joomla/user/helper.php');
+if (!is_dir($csv_path)) {
+    die('CSV folder not found: ' . $csv_path);
+}
 
-$mainframe = Factory::getApplication('site');
+$d = dir($csv_path) or die("Wrong path: $csv_path");
 
-$db = Factory::getDBO();
-
-$image_file_path = JPATH_SITE . '/atelftp';
-
-$d = dir($image_file_path) or die("Wrong path: $image_file_path");
+$totalImported = 0;
+$totalSkipped  = 0;
+$totalError    = 0;
 
 while (false !== ($entry = $d->read())) {
 
-	if ($entry != '.' && $entry != '..' && !is_dir($dir . $entry)) {
+    // skip folder
+    if ($entry == '.' || $entry == '..') {
+        continue;
+    }
 
+    $file = $csv_path . '/' . $entry;
 
-		/* check the CSV extensions */
-		if (!preg_match('/^customer\.csv$/i', $entry))
-			continue;
+    if (is_dir($file)) {
+        continue;
+    }
 
-		/* if have same file name, use that id */
+    // only customer.csv
+    if (!preg_match('/^customer\.csv$/i', $entry)) {
+        continue;
+    }
 
+    echo "<hr>";
+    echo "Processing: {$entry}<br>";
 
-		if (($handle = fopen($image_file_path . '/' . $entry, "r")) !== FALSE) {
+    $handle = fopen($file, "r");
 
-			$line = fgetcsv($handle, 4096, ","); // database header;
+    if ($handle === false) {
+        echo "Cannot open file<br>";
+        continue;
+    }
 
-			$header = array();
+    // read header
+    $header = fgetcsv($handle, 4096, ",");
 
-			foreach ($line as $t) :
-				$header[] = $t;
-			endforeach;
+    if (!$header || count($header) < 2) {
+        echo "Invalid CSV header<br>";
+        fclose($handle);
+        continue;
+    }
 
-			$cnt = count($header);
+    $lineNo = 1;
 
-			if ($cnt != 2) {
-				continue;
-			}
-			$text = '';
-			while (($data = fgetcsv($handle, 4096, ",")) !== FALSE) {
+    $db->transactionStart();
 
-				/* 	Data Field */
+    try {
 
-				$customer_id 	= 	trim($data[0]);
-				$name 			= 	trim($data[1]);
+        while (($data = fgetcsv($handle, 4096, ",")) !== false) {
 
-				// check whether Customer ID alreadyd exist, if exist, do not insert data into user db
-				$query = " SELECT id FROM #__users WHERE customer_id = " . $db->Quote(trim($customer_id), false);
-				$db->setQuery($query);
-				$cust_id_exist = $db->loadResult();
+            $lineNo++;
 
-				if ($cust_id_exist)
-					continue;
-				$password = UserHelper::hashPassword($customer_id);
-				//$salt = JUserHelper::genRandomPassword(32);
-				//$crypt = JUserHelper::getCryptedPassword($customer_id, $salt);
-				//$password = $crypt . ':' . $salt;
+            // validate column
+            if (count($data) < 2) {
+                $totalSkipped++;
+                continue;
+            }
 
-				$query = "INSERT INTO #__users (name, username, password, usertype, block, sendEmail, gid, customer_id) "
-					. "VALUES ("
-					. $db->quote($name)
-					. ", " . $db->quote($customer_id)
-					. ", " . $db->quote($password)
-					. ", " . $db->quote('Administrator')
-					. ", 0"
-					. ", 0"
-					. ", 24"
-					. ", " . $db->quote($customer_id)
-					. ")";
+            $customer_id = trim($data[0]);
+            $name        = trim($data[1]);
 
-				$db->setQuery($query);
-				$db->execute();
+            // empty data
+            if (empty($customer_id) || empty($name)) {
+                $totalSkipped++;
+                continue;
+            }
 
-				$user_id = $db->insertid();
+            // check existing user
+            $query = $db->getQuery(true)
+                ->select($db->quoteName('id'))
+                ->from($db->quoteName('#__users'))
+                ->where(
+                    $db->quoteName('customer_id') . ' = ' .
+                    $db->quote($customer_id)
+                );
 
+            $db->setQuery($query);
 
-				$query = $db->getQuery(true)
-					->insert($db->quoteName('#__user_usergroup_map'))
-					->columns([$db->quoteName('user_id'), $db->quoteName('group_id')])
-					->values((int) $userId . ', 24');
+            $existUserId = $db->loadResult();
 
-				$db->setQuery($query);
-				$db->execute();
-			}
+            if ($existUserId) {
 
-			fclose($handle);
-			//unlink($image_file_path.'/'.$entry);
+                echo "Skip existing customer_id: {$customer_id}<br>";
 
-		}
-	}
+                $totalSkipped++;
+                continue;
+            }
+
+            // hashed password
+            $password = UserHelper::hashPassword($customer_id);
+
+            // insert user
+            $columns = [
+                'name',
+                'username',
+                'password',
+                'email',
+                'block',
+                'sendEmail',
+                'registerDate',
+                'lastvisitDate',
+                'activation',
+                'params',
+                'requireReset',
+                'resetCount',
+                'otpKey',
+                'otep',
+                'customer_id'
+            ];
+
+            $values = [
+                $db->quote($name),
+                $db->quote($customer_id),
+                $db->quote($password),
+                $db->quote($customer_id . '@dummy.local'),
+                0,
+                0,
+                $db->quote(date('Y-m-d H:i:s')),
+                $db->quote($db->getNullDate()),
+                $db->quote(''),
+                $db->quote('{}'),
+                0,
+                0,
+                $db->quote(''),
+                $db->quote(''),
+                $db->quote($customer_id)
+            ];
+
+            $query = $db->getQuery(true)
+                ->insert($db->quoteName('#__users'))
+                ->columns($db->quoteName($columns))
+                ->values(implode(',', $values));
+
+            $db->setQuery($query);
+            $db->execute();
+
+            $user_id = $db->insertid();
+
+            if (!$user_id) {
+                throw new Exception("Cannot create user at line {$lineNo}");
+            }
+
+            // assign user group
+            $query = $db->getQuery(true)
+                ->insert($db->quoteName('#__user_usergroup_map'))
+                ->columns([
+                    $db->quoteName('user_id'),
+                    $db->quoteName('group_id')
+                ])
+                ->values((int) $user_id . ',24');
+
+            $db->setQuery($query);
+            $db->execute();
+
+            echo "Imported: {$customer_id}<br>";
+
+            $totalImported++;
+        }
+
+        $db->transactionCommit();
+
+    } catch (Exception $e) {
+
+        $db->transactionRollback();
+
+        echo "<span style='color:red'>";
+        echo "ERROR: " . $e->getMessage();
+        echo "</span><br>";
+
+        $totalError++;
+    }
+
+    fclose($handle);
+
+    // remove file after import
+    // unlink($file);
 }
 
 $d->close();
+
+echo "<hr>";
+echo "<h3>IMPORT SUMMARY</h3>";
+
+echo "Imported: {$totalImported}<br>";
+echo "Skipped: {$totalSkipped}<br>";
+echo "Errors: {$totalError}<br>";
+
+echo "<br><strong>Import completed</strong>";

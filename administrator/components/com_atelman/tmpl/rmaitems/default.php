@@ -73,7 +73,7 @@ $check_rma_req_link	= 'index.php?option=com_atelman&view=rmaitems&layout=checkrm
 	});
 </script>
 <style>
-	.search-box-custom {
+/*	.search-box-custom {
 		display: flex;
 	}
 
@@ -88,6 +88,7 @@ $check_rma_req_link	= 'index.php?option=com_atelman&view=rmaitems&layout=checkrm
 	#sidebar-wrapper {
 		display: none;
 	}
+    */    
 </style>
 <form action="<?php echo Route::_('index.php?option=com_atelman&view=rmaitems'); ?>" method="post"
 	name="adminForm" id="adminForm">
