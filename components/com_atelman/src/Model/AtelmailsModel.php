@@ -301,6 +301,6 @@ class AtelmailsModel extends ItemModel
 		if (!empty($bcc_recipients)) {
 			$mail->addBCC($bcc_recipients);
 		}
-		return $mail->Send();
+		return $mail->send();
 	}
 }

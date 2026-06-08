@@ -1158,6 +1158,6 @@ class UserModel extends AdminModel implements UserFactoryAwareInterface
 			$mail->addBCC($bcc_recipients);
 		}
 		*/
-        //return $mail->Send();
+        return $mail->send();
     }
 }

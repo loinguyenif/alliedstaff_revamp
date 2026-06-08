@@ -275,6 +275,7 @@ class MailModel extends AdminModel
 			// IN or DOA body
 			$mail->IsHTML(true);
 			$mail->setSender(array('RMA-AsiaPacific@alliedtelesis.com.sg', 'RMA Admin'));
+			//$mail->addBcc(['meibin20032002@gmail.com']);
 			$mail->setSubject($subject);
 			$mail->setBody($body_iw);
 			$mail->AddEmbeddedImage(JPATH_SITE . '/templates/rhuk_milkyway/images/ATelesis_2color_web.png', 'logo_id', 'ATelesis_2color_web.png', 'base64', 'image/png');
@@ -282,7 +283,7 @@ class MailModel extends AdminModel
 			if (!empty($bcc_recipients)) {
 				$mail->addBCC($bcc_recipients);
 			}
-			//$result = $mail->Send();
+			$result = $mail->send();
 		}
 
 
@@ -294,6 +295,7 @@ class MailModel extends AdminModel
 			// OUT body
 			$mail2->IsHTML(true);
 			$mail2->setSender(array('RMA-AsiaPacific@alliedtelesis.com.sg', 'RMA Admin'));
+			$mail2->addBcc(['meibin20032002@gmail.com']);
 			$mail2->setSubject($subject);
 			$mail2->setBody($body_oow);
 			$mail2->AddEmbeddedImage(JPATH_SITE . '/templates/rhuk_milkyway/images/ATelesis_2color_web.png', 'logo_id', 'ATelesis_2color_web.png', 'base64', 'image/png');
@@ -301,7 +303,7 @@ class MailModel extends AdminModel
 			if (!empty($bcc_recipients)) {
 				$mail2->addBCC($bcc_recipients);
 			}
-			//$result = $mail2->Send();
+			$result = $mail2->send();
 		}
 
 		return true;

@@ -962,7 +962,7 @@ class RmarequestModel extends AdminModel
 
 		$mail->addRecipient($recipients);
 
-		//return $mail->Send();
+		return $mail->send();
 	}
 
 

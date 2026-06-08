@@ -4,7 +4,16 @@ define('JPATH_BASE', __DIR__);
 
 require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_BASE . '/includes/framework.php';
-
+if (PHP_SAPI === 'cli') {
+    $_SERVER['HTTP_HOST']       = 'localhost';
+    $_SERVER['SERVER_NAME']     = 'localhost';
+    $_SERVER['REQUEST_URI']     = '/';
+    $_SERVER['SCRIPT_NAME']     = '/warrantyregcron_2330.php';
+    $_SERVER['PHP_SELF']        = '/warrantyregcron_2330.php';
+    $_SERVER['SERVER_PORT']     = '80';
+    $_SERVER['REQUEST_SCHEME']  = 'http';
+    $_SERVER['HTTPS']           = 'on';
+}
 // Boot the DI container
 $container = \Joomla\CMS\Factory::getContainer();
 $container->alias('session.web', 'session.web.site')
