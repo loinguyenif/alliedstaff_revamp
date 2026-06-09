@@ -86,7 +86,7 @@ class LogsModel extends ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// List state information.
-		parent::populateState('id', 'ASC');
+		parent::populateState('id', 'DESC');
 
 		$context = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $context);
@@ -176,7 +176,6 @@ class LogsModel extends ListModel
 		if ($orderCol && $orderDirn) {
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
-
 		return $query;
 	}
 

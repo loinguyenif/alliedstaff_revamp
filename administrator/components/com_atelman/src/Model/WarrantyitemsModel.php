@@ -103,7 +103,7 @@ class WarrantyitemsModel extends ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// List state information.
-		parent::populateState('id', 'ASC');
+		parent::populateState('id', 'DESC');
 
 		$context = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $context);
@@ -210,9 +210,9 @@ class WarrantyitemsModel extends ListModel
 		$query->join('LEFT', $db->quoteName('#__users', 'u') . ' ON u.customer_id = a.customer_id');
 
 		$query->select('c.country,COALESCE(
-		a.expired_date_manual,
-		a.extended_expired_date,
-		a.expired_date
+			NULLIF(a.expired_date_manual, "0000-00-00"),
+		 	NULLIF(a.extended_expired_date, "0000-00-00"),
+		 	NULLIF(a.expired_date, "0000-00-00")
 		) AS real_expiry_date');
 		$query->join('LEFT', $db->quoteName('#__at_countries', 'c') . ' ON c.id = u.country_id');
 
@@ -268,14 +268,15 @@ class WarrantyitemsModel extends ListModel
 
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering', 'id');
-		$orderDirn = $this->state->get('list.direction', 'ASC');
+		$orderDirn = $this->state->get('list.direction', 'DESC');
 		if ($orderCol == "id") {
 			$orderCol = "a.id";
 		}
 
 		if ($orderCol && $orderDirn) {
-			//$query->order($db->escape($orderCol . ' ' . $orderDirn));
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
+		echo $query;
 		return $query;
 	}
 

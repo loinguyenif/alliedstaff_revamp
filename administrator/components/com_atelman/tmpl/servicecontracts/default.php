@@ -223,10 +223,10 @@ $submit_rma_req_link	= 'index.php?option=com_atelman&view=servicecontracts&layou
 									</a>
 								</td>
 								<td>
-									<?php echo ($item->start_date != '0000-00-00 00:00:00' && $item->start_date != NULL) ? date("d/m/Y", strtotime($item->start_date)) : '-'; ?>
+									<?php echo ($item->start_date != '0000-00-00' && $item->start_date != NULL) ? date("d/m/Y", strtotime($item->start_date)) : '-'; ?>
 								</td>
 								<td>
-									<?php echo ($item->expiry_date != '0000-00-00 00:00:00' && $item->start_date != NULL) ? date("d/m/Y", strtotime($item->expiry_date)) : 'TBA'; ?>
+									<?php echo ($item->expiry_date != '0000-00-00' && $item->start_date != NULL) ? date("d/m/Y", strtotime($item->expiry_date)) : 'TBA'; ?>
 								</td>
 								<td>
 									<?php echo $item->service_type; ?>
