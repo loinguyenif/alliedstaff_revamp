@@ -86,8 +86,8 @@ class HtmlView extends BaseHtmlView
 			$lists['product_no'] = '<input type="text" name="product_no" value="' . @$row->product_no . '">';
 			$lists['model_no'] = (@$row->model_no) ? @$row->model_no : 'N/A';
 
-			if (@$row->purchase_date != NULL && @$row->purchase_date != '0000-00-00 00:00:00') $purchase_date = $row->purchase_date; //date("d/m/Y", strtotime($row->purchase_date));
-			if (@$row->expired_date_manual != NULL && @$row->expired_date_manual != '0000-00-00 00:00:00') $expired_date = $row->expired_date_manual; //date("d/m/Y", strtotime($row->expired_date_manual));
+			if (@$row->purchase_date != NULL && @$row->purchase_date != '0000-00-00') $purchase_date = $row->purchase_date; //date("d/m/Y", strtotime($row->purchase_date));
+			if (@$row->expired_date_manual != NULL && @$row->expired_date_manual != '0000-00-00') $expired_date = $row->expired_date_manual; //date("d/m/Y", strtotime($row->expired_date_manual));
 			// purchase date
 
 			$lists['purchase_date'] =  JHTML::calendar(@$purchase_date, 'purchase_date', 'purchase_date', '%d/%m/%Y', ' class="validate-dates" onblur="javascript:void(0)" ') . " Date Format : DD/MM/YYYY ";
@@ -110,14 +110,14 @@ class HtmlView extends BaseHtmlView
 			$lists['model_no'] = (@$row->model_no) ? $row->model_no : 'N/A';
 
 			// expired_date
-			$lists['purchase_date'] = (@$row->purchase_date != '0000-00-00 00:00:00' && $row->purchase_date != NULL) ? date("d/m/Y", strtotime($row->purchase_date)) : 'N/A';
+			$lists['purchase_date'] = (@$row->purchase_date != '0000-00-00' && $row->purchase_date != NULL) ? date("d/m/Y", strtotime($row->purchase_date)) : 'N/A';
 
 			// expired_date
-			$lists['expired_date'] = (@$row->expired_date_manual != '0000-00-00 00:00:00' && $row->expired_date_manual != NULL) ? date("d/m/Y", strtotime($row->expired_date_manual)) : 'N/A';
+			$lists['expired_date'] = (@$row->expired_date_manual != '0000-00-00' && $row->expired_date_manual != NULL) ? date("d/m/Y", strtotime($row->expired_date_manual)) : 'N/A';
 
 			// extended_warranty
 			$lists['extended_warranty'] = @$row->extended_warranty;
-			$lists['extended_warranty_date'] = (@$row->extended_expired_date != '0000-00-00 00:00:00' && $row->extended_expired_date != NULL) ? date("d/m/Y", strtotime($row->extended_expired_date)) : 'N/A';
+			$lists['extended_warranty_date'] = (@$row->extended_expired_date != '0000-00-00' && $row->extended_expired_date != NULL) ? date("d/m/Y", strtotime($row->extended_expired_date)) : 'N/A';
 		}
 
 		$this->lists = $lists;

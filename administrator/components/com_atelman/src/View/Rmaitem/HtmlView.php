@@ -124,11 +124,11 @@ class HtmlView extends BaseHtmlView
 						$filenameRMAArr[$f->status]['object_file'][] = $f->id . "|" . date("d/m/Y H:i", @strtotime(@$f->created_date)) . "|" . $f->filename;
 					endforeach;
 				}
-				if ($row->replacement_date != '0000-00-00 00:00:00') $replacement_date = date("d/m/Y", @strtotime($row->replacement_date));
+				if ($row->replacement_date != '0000-00-00') $replacement_date = date("d/m/Y", @strtotime($row->replacement_date));
 				//if($row->rma_assigned_date != '0000-00-00') $rma_assigned_date = date("d/m/Y",strtotime($row->rma_assigned_date));
-				if ($row->received_date != '0000-00-00 00:00:00') $received_date = date("d/m/Y", @strtotime($row->received_date));
-				if ($row->shipped_date != '0000-00-00 00:00:00') $shipped_date = date("d/m/Y", @strtotime($row->shipped_date));
-				if ($row->closed_date != '0000-00-00 00:00:00') $closed_date = date("d/m/Y", @strtotime($row->closed_date));
+				if ($row->received_date != '0000-00-00') $received_date = date("d/m/Y", @strtotime($row->received_date));
+				if ($row->shipped_date != '0000-00-00') $shipped_date = date("d/m/Y", @strtotime($row->shipped_date));
+				if ($row->closed_date != '0000-00-00') $closed_date = date("d/m/Y", @strtotime($row->closed_date));
 
 				if ($currentUser->gid == 25 || $currentUser->gid == 8 || $currentUser->gid == 32 || $currentUser->gid == 34) {
 					$lists['replacement_date'] 	=  HTMLHelper::_('calendar', $row->replacement_date, 'replacement_date', 'replacement_date', '%d/%m/%Y', ' class="validate-dates" onblur="javascript:void(0)" ') . "<br />Date Format : DD/MM/YYYY ";
@@ -140,11 +140,11 @@ class HtmlView extends BaseHtmlView
 
 				$row->real_expired_date = '-';
 
-				if ($row->expired_date_manual != '0000-00-00 00:00:00' && isset($row->expired_date_manual)):
+				if ($row->expired_date_manual != '0000-00-00' && isset($row->expired_date_manual)):
 					$row->real_expired_date = date("m/Y", strtotime($row->expired_date_manual));
-				elseif ($row->extended_expired_date != '0000-00-00 00:00:00' && isset($row->extended_expired_date)) :
+				elseif ($row->extended_expired_date != '0000-00-00' && isset($row->extended_expired_date)) :
 					$row->real_expired_date = date("d/m/Y", strtotime($row->extended_expired_date));
-				elseif ($row->expired_date != '0000-00-00 00:00:00' && isset($row->expired_date)) :
+				elseif ($row->expired_date != '0000-00-00' && isset($row->expired_date)) :
 					$row->real_expired_date = date("d/m/Y", strtotime($row->expired_date));
 				endif;
 

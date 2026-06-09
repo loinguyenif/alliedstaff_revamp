@@ -161,7 +161,7 @@ class AtelcheckrequestModel extends FormModel
 				$html .= '<td width="170px">' . ((!empty($r->replacement_pn)) ? $helper->getProductByPartNumber($r->replacement_pn)->model_no : $helper->getItemById('products', $r->product_id)->model_no) . '</td>';
 				$html .= '<td width="150px;">' . $serial_no . '</td>';
 				$html .= '<td width="80px;">' . date("d M Y", strtotime($r->purchase_date)) . '</td>';
-				$html .= '<td width="80px;">' . (($r->expired_date_manual != NULL && $r->expired_date_manual != '0000-00-00 00:00:00') ? date("d M Y", strtotime($r->expired_date_manual)) : (($r->extended_warranty > 0) ? date("d M Y", strtotime($r->extended_expired_date)) : date("d M Y", strtotime($r->expired_date)))) . '</td>';
+				$html .= '<td width="80px;">' . (($r->expired_date_manual != NULL && $r->expired_date_manual != '0000-00-00') ? date("d M Y", strtotime($r->expired_date_manual)) : (($r->extended_warranty > 0) ? date("d M Y", strtotime($r->extended_expired_date)) : date("d M Y", strtotime($r->expired_date)))) . '</td>';
 				$html .= '</tr>';
 			endforeach;
 			$html .= '</table>';

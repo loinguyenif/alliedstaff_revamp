@@ -347,8 +347,8 @@ class WarrantyregisterModel extends AdminModel
 				foreach ($items as $i):
 
 					$expiry_date = $i->expired_date;
-					if ($i->extended_expired_date != '0000-00-00 00:00:00' && $i->extended_expired_date != NULL) $expiry_date = $i->extended_expired_date;
-					if ($i->expired_date_manual != '0000-00-00 00:00:00' && $i->expired_date_manual != NULL) $expiry_date = $i->expired_date_manual;
+					if ($i->extended_expired_date != '0000-00-00' && $i->extended_expired_date != NULL) $expiry_date = $i->extended_expired_date;
+					if ($i->expired_date_manual != '0000-00-00' && $i->expired_date_manual != NULL) $expiry_date = $i->expired_date_manual;
 
 
 					$html .= '<tr>';

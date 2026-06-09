@@ -676,7 +676,7 @@ class RmarequestModel extends AdminModel
 			if (!$rma->rmacode) {
 				$rmacode = 'N/A';
 
-				if ($rma->rma_assigned_date == '0000-00-00 00:00:00') {
+				if ($rma->rma_assigned_date == '0000-00-00') {
 					$data['rma_assigned_date'] = date("Y-m-d", time());
 				}
 			}
