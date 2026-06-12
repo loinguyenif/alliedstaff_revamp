@@ -292,11 +292,12 @@ class RmarequestModel extends AdminModel
 		$query = " SELECT customer_id FROM #__users WHERE country_id = 13 ";
 		$db->setQuery($query);
 		$india_customers_array = $db->loadColumn();
-
 		if (!$atelrmarequest->bind($post))
 			return false;
 		$atelrmarequest->created_date = date('Y-m-d H:i:s');
-		$tmp = 	$atelrmarequest->store();
+		if (!$atelrmarequest->store()) {
+			throw new \RuntimeException($atelrmarequest->getError() ?: 'Unable to save RMA request');
+		}
 
 		$row_id = 	$atelrmarequest->id; // new id for rma request id
 
@@ -325,18 +326,19 @@ class RmarequestModel extends AdminModel
 				continue;
 			}
 
-			$atelrmaitem->id								=		'';
-			$atelrmaitem->rma_request_id 		= 	$row_id;
-			$atelrmaitem->warranty_item_id	= 	$warranty_id;
-			$atelrmaitem->warranty_status =		$wstatus;
-			$atelrmaitem->description =		$fdescription;
-			$atelrmaitem->remarks =		$remarks;
-			$atelrmaitem->so_no =		$so_no;
-			$atelrmaitem->invoice_no =		$invoice_no;
-			$atelrmaitem->customer_id =		(in_array($warranty_customer_id, $india_customers_array) ? '80001363' : $warranty_customer_id);
-			$atelrmaitem->requested_sn =		$serial_no;
-			$atelrmaitem->product_id =		$product_id;
-			$atelrmaitem->replacement_pn =		$product_no;
+			$atelrmaitem->id = 0;
+			$atelrmaitem->rma_request_id = 	$row_id;
+			$atelrmaitem->warranty_item_id = $warranty_id;
+			$atelrmaitem->warranty_status =	$wstatus;
+			$atelrmaitem->description =	$fdescription;
+			$atelrmaitem->remarks =	$remarks;
+			$atelrmaitem->so_no = $so_no;
+			$atelrmaitem->invoice_no = $invoice_no;
+			$atelrmaitem->customer_id =	(in_array($warranty_customer_id, $india_customers_array) ? '80001363' : $warranty_customer_id);
+			$atelrmaitem->requested_sn = $serial_no;
+			$atelrmaitem->product_id = $product_id;
+			$atelrmaitem->replacement_pn = $product_no;
+			$atelrmaitem->replacement_sn = '';
 			$atelrmaitem->rmacode = 	'';
 
 			//ifoundries added : 25 May 2017 : check current RMA 
@@ -391,8 +393,25 @@ class RmarequestModel extends AdminModel
 				}
 			}
 
+			if (!empty($atelrmaitem->shipping_duration)) {
+				$atelrmaitem->replacement_date = date('Y-m-d', time() + ((int) $atelrmaitem->shipping_duration * 86400));
+			}
+
+			$atelrmaitem->received_date = !empty($post['received_date'])
+				? date('Y-m-d', strtotime(str_replace('/', '-', $post['received_date'])))
+				: date('Y-m-d');
+
 			$atelrmaitem->created_date = date('Y-m-d H:i:s');
-			$atelrmaitem->store();
+			$atelrmaitem->shipped_date = !empty($post['shipped_date'])
+				? date('Y-m-d', strtotime(str_replace('/', '-', $post['shipped_date'])))
+				: date('Y-m-d');
+			$atelrmaitem->closed_date = !empty($post['closed_date'])
+				? date('Y-m-d', strtotime(str_replace('/', '-', $post['closed_date'])))
+				: date('Y-m-d');
+			$atelrmaitem->is_import_csv = 0;
+			if (!$atelrmaitem->store()) {
+				throw new \RuntimeException($atelrmaitem->getError() ?: 'Unable to save RMA item');
+			}
 
 			$atelwarrantyitem->id = $warranty_id;
 			$atelwarrantyitem->replacement_pn = $product_no;

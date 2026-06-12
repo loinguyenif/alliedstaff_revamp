@@ -330,6 +330,7 @@ class MailModel extends AdminModel
 		$atelDownload->status 		= 'RMAREQUEST';
 		$atelDownload->filename 	= "RMA-" . $txtstring . ".pdf";
 		$atelDownload->uploaded_by 	= $user->id;
+		$atelDownload->is_airway_bill = 0;
 		$db->insertObject('#__at_rma_downloads', $atelDownload);
 	}
 }

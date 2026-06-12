@@ -276,7 +276,7 @@ class WarrantyitemsModel extends ListModel
 		if ($orderCol && $orderDirn) {
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
-		echo $query;
+		
 		return $query;
 	}
 

@@ -178,6 +178,7 @@ class RmaitemsModel extends ListModel
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
+		$currentUser = Factory::getUser();
 
 		// Select the required fields from the table.
 		$query->select(
@@ -201,7 +202,6 @@ class RmaitemsModel extends ListModel
 		$query->join('LEFT', '#__users AS `u` ON a.customer_id = u.customer_id AND u.customer_id != \'\' ');
 
 
-
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 		if (!empty($search)) {
@@ -220,6 +220,15 @@ class RmaitemsModel extends ListModel
 
 
 		//ifoundries
+		if (in_array(24, $currentUser->groups)) { // distributor, see his own data		
+			$query->where(' a.customer_id = '.$currentUser->customer_id);
+			$query->where(' u.country_id = '.$currentUser->country_id);
+		} 
+		
+		if (in_array(23, $currentUser->groups)) { // Manager, can his own country, and can see other data within country but diff user
+			$query->where(' u.country_id = '.$currentUser->country_id);
+		}
+
 		$status = $this->getState('filter.status');
 
 		if ($status) {
