@@ -219,6 +219,9 @@ class CsvservicecontractModel extends AdminModel
 					$query = " SELECT w.customer_id, w.product_id , w.id FROM #__at_warranty_items AS w WHERE w.serial_no = '$serial_no' LIMIT 1; ";
 					$db->setQuery($query);
 					$detail = $db->loadObject();
+					if (!$detail) {
+						continue;
+					}
 
 					if ($expiry_date == 'TBA' || $expiry_date == '') {
 						$expiry_date = '0000-00-00';
@@ -243,6 +246,7 @@ class CsvservicecontractModel extends AdminModel
 						$atelservicecontract->id = $id;
 					}
 
+					$atelservicecontract->user_id 		= 0;			
 					$atelservicecontract->service_contract_no 		= $service_contract_no;
 					$atelservicecontract->po_no 					= $po_no;
 					$atelservicecontract->start_date 				= $start_date;
@@ -253,8 +257,13 @@ class CsvservicecontractModel extends AdminModel
 					}
 					$atelservicecontract->service_type 				= $service_type;
 					$atelservicecontract->client_name 				= $client_name;
+					$atelservicecontract->remarks 		= '';
+					$atelservicecontract->reminder1 = 0;
 
-					$result = $atelservicecontract->store();
+					//$result = $atelservicecontract->store();
+					if (!$atelservicecontract->store()) {
+						die($atelservicecontract->getError());
+					}
 
 					$service_contract_item_id = '';
 					$query = " SELECT id FROM #__at_service_contract_product_xref WHERE serial_no = '" . $serial_no . "' AND service_contract_id = '" . $atelservicecontract->id . "' LIMIT 1; ";
@@ -273,10 +282,13 @@ class CsvservicecontractModel extends AdminModel
 					$atelservicecontractitem->service_contract_id 	= $atelservicecontract->id;
 					$atelservicecontractitem->warranty_id 			= $detail->id;
 					$atelservicecontractitem->serial_no 			= $serial_no;
-					$atelservicecontractitem->model_no 				= $parts->model_no;
-					$atelservicecontractitem->part_no 				= $parts->product_no;
+					$atelservicecontractitem->model_no            = $parts->model_no ?? '';
+					$atelservicecontractitem->part_no             = $parts->product_no ?? '';
 
-					$result = $atelservicecontractitem->store();
+					//$result = $atelservicecontractitem->store();
+					if (!$atelservicecontractitem->store()) {
+						die($atelservicecontractitem->getError());
+					}
 				}
 			}
 		}
