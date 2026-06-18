@@ -110,7 +110,7 @@
 		</fieldset>
 	</div>
 	<div class="clr"></div>
-	<input type="hidden" name="task" value="warrantyitem.csv_update" />
+	<input type="hidden" name="task" value="warrantyitems.csv_update" />
 	<input type="hidden" name="view" value="warrantyitem" />
 	<input type="hidden" name="option" value="com_atelman" />
 	<?php echo JHTML::_('form.token'); ?>

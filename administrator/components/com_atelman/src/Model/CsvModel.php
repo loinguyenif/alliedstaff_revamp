@@ -1133,7 +1133,19 @@ class CsvModel extends AdminModel
 						unset($atelwarrantyitem->comments);
 					}
 					$atelwarrantyitem->created_date = $item->created_date;
-					$tmp = $atelwarrantyitem->store();
+					$atelwarrantyitem->warranty_id = $item->warranty_id;
+					$atelwarrantyitem->product_id = $item->product_id;
+					$atelwarrantyitem->serial_no = $serial_no;
+					$atelwarrantyitem->po_no = $item->po_no;
+					$atelwarrantyitem->so_no = $item->so_no;
+					$atelwarrantyitem->invoice_no = $item->invoice_no;
+					$atelwarrantyitem->purchase_date = $item->purchase_date;
+					$atelwarrantyitem->expired_date = $item->expired_date;
+					//var_dump($item);die;
+					//if (!$atelwarrantyitem->store()) {
+					//	die($atelwarrantyitem->getError());
+					//}
+					$atelwarrantyitem->store();
 				}
 			}
 		}
