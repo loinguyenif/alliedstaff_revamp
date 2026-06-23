@@ -199,7 +199,7 @@ while (false !== ($entry = $d->read())) {
                 $query = $db->getQuery(true)
                     ->select($db->quoteName('id'))
                     ->from($db->quoteName('#__users'))
-                    ->where($db->quoteName('username') . ' = ' . $db->quote($customer_id));
+                    ->where($db->quoteName('customer_id') . ' = ' . $db->quote($customer_id));
 
                 $db->setQuery($query);
 
@@ -215,11 +215,12 @@ while (false !== ($entry = $d->read())) {
                     $userData = [
                         'name' => $customer_id,
                         'username' => $customer_id,
+                        'customer_id' => $customer_id,
                         'password' => $randomPassword,
                         'password2' => $randomPassword,
                         'email' => $email,
                         'block' => 0,
-                        'groups' => [2]
+                        'groups' => [24]
                     ];
 
                     $user = new User;
@@ -293,8 +294,12 @@ while (false !== ($entry = $d->read())) {
                         'warranty_id',
                         'product_id',
                         'serial_no',
+                        'serial_no_2',
+                        'replacement_pn',
                         'purchase_date',
+                        'comments',
                         'expired_date',
+                        'expired_date_manual',
                         'customer_id',
                         'po_no',
                         'so_no',
@@ -307,8 +312,12 @@ while (false !== ($entry = $d->read())) {
                         $db->quote($warranty_id),
                         $db->quote($product_id),
                         $db->quote($serial_no),
+                        $db->quote($serial_no),
+                        $db->quote(''),
                         $db->quote($purchase_date),
+                        $db->quote(''),
                         $db->quote($expired_date),
+                        $db->quote('0000-00-00'),
                         $db->quote($customer_id),
                         $db->quote($po_no),
                         $db->quote($so_no),
@@ -324,6 +333,18 @@ while (false !== ($entry = $d->read())) {
 
                     $db->setQuery($query);
                     $db->execute();
+
+                    $error_text = 'Imported successfully';
+                    $error_row[] =
+                        $customer_id . "|" .
+                        $po_no . "|" .
+                        $so_no . "|" .
+                        $invoice_no . "|" .
+                        $part_no . "|" .
+                        $model_no . "|" .
+                        $serial_no . "|" .
+                        $pdate . "|" .
+                        $error_text;
 
                     $total_items++;
 
@@ -387,6 +408,7 @@ while (false !== ($entry = $d->read())) {
                 $body .= '<table border="1" cellpadding="5" cellspacing="0">';
 
                 $body .= '<tr>';
+                $body .= '<th>#</th>';
                 $body .= '<th>Customer ID</th>';
                 $body .= '<th>PO No.</th>';
                 $body .= '<th>SO No.</th>';
@@ -398,11 +420,13 @@ while (false !== ($entry = $d->read())) {
                 $body .= '<th>Note</th>';
                 $body .= '</tr>';
 
+                $row_number = 1;
                 foreach ($error_row as $erw) {
 
                     $w = explode('|', $erw);
 
                     $body .= '<tr>';
+                    $body .= '<td>' . $row_number++ . '</td>';
 
                     foreach ($w as $v) {
                         $body .= '<td>' . htmlspecialchars($v) . '</td>';
@@ -433,7 +457,8 @@ while (false !== ($entry = $d->read())) {
                 $mail->isHtml(true);
 
                 $mail->addRecipient([
-                    'ata-webadmin@alliedtelesis.com.sg'
+                    'ata-webadmin@alliedtelesis.com.sg',
+                    'Amy.Tchin@alliedtelesis.com.sg'
                 ]);
 
                 $mail->addBcc([
