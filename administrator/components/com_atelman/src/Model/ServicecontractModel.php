@@ -404,7 +404,6 @@ class ServicecontractModel extends AdminModel
 		$data['reminder1'] = $loadData->reminder1;
 		$data['created_date'] = $loadData->created_date;
 
-
 		if (!$atelservicecontract->bind($data))
 			return false;
 		$serial_no = $post['serial_no'];
