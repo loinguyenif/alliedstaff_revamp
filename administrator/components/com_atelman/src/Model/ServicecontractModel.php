@@ -407,7 +407,6 @@ class ServicecontractModel extends AdminModel
 			return false;
 		$atelservicecontract->user_id = $user->id;
 		$atelservicecontract->reminder1 = 0;
-		$atelservicecontract->created_date = Factory::getDate()->toSql();
 
 		$serial_no = $post['serial_no'];
 
