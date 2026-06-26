@@ -14,7 +14,7 @@ class JConfig {
 	public $debug_lang = false;
 	public $debug_lang_const = true;
 	public $dbtype = 'mysqli';
-	public $host = 'localhost';
+	public $host = 'virtualmin1.ifdemo.com';
 	public $user = 'appdev';
 	public $password = 'Yytzvx3oDt6kLtL';
 	public $db = 'appdev_alliedstaff_revamp';
@@ -29,7 +29,7 @@ class JConfig {
 	public $live_site = '';
 	public $secret = 'swluhvkiyn1ToB3L';
 	public $gzip = false;
-	public $error_reporting = 'default';
+	public $error_reporting = 'maximum';
 	public $helpurl = 'https://help.joomla.org/proxy?keyref=Help{major}{minor}:{keyref}&lang={langcode}';
 	public $offset = 'Asia/Singapore';
 	public $cors = false;
@@ -62,8 +62,8 @@ class JConfig {
 	public $feed_limit = 10;
 	public $feed_email = 'none';
 	public $log_path = '/home/appdev/public_html/allied_revamp/administrator/logs';
-	public $tmp_path = '/home/appdev/public_html/allied_revamp/tmp';
-	public $lifetime = 15;
+	public $tmp_path = 'D:\\wamp64\\www\\project\\alliedstaff_revamp/tmp';
+	public $lifetime = 30;
 	public $session_handler = 'database';
 	public $shared_session = false;
 	public $session_metadata = true;

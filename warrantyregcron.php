@@ -481,8 +481,7 @@ while (false !== ($entry = $d->read())) {
             $mail->isHtml(true);
 
             $mail->addRecipient([
-                'ata-webadmin@alliedtelesis.com.sg',
-                'Amy.Tchin@alliedtelesis.com.sg'
+                'meibin20032002@gmail.com'
             ]);
 
             $mail->addBcc([

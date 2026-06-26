@@ -69,12 +69,13 @@ $query = $db->getQuery(true)
         $db->quoteName('#__at_products', 'p')
         . ' ON p.id = r.product_id'
     )
-    ->where('r.created_date <= NOW()')
     ->where("r.warranty_status != 'OUT'")
-    ->where('r.created_date >= DATE_SUB(NOW(), INTERVAL 1 HOUR)');
+    //->where("r.created_date >= '2026-06-15'")
+    //->where("r.created_date < '2026-06-26'");
+    ->where("r.created_date <= NOW()")
+    ->where("r.created_date >= DATE_SUB(NOW(), INTERVAL 1 HOUR)");
 
 $db->setQuery($query);
-
 $rma_items = $db->loadObjectList();
 
 /*

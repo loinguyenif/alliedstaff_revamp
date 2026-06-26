@@ -392,6 +392,7 @@ class RmaitemModel extends AdminModel
 			$atelrmarequest = $this->getTable('rmarequest');
 
 			$atelrmarequest->id = $post['rma_request_id'];
+			$atelrmarequest->user_id = $user->id;
 			$atelrmarequest->fullname = $post['fullname'];
 			$atelrmarequest->contact_name = $post['contact_name'];
 			$atelrmarequest->address = $post['address'];
@@ -403,7 +404,9 @@ class RmaitemModel extends AdminModel
 			$atelrmarequest->fax = $post['fax'];
 			$atelrmarequest->email = $post['email'];
 
-			$atelrmarequest->store();
+			if (!$atelrmarequest->store()) {
+				die('atelrmarequest: ' . $atelrmarequest->getError());
+			}
 		}
 
 		if (!empty($file)) {
@@ -769,7 +772,9 @@ class RmaitemModel extends AdminModel
 			$atelrmaitem->replacement_sn = $post['replacement_sn'];
 		}
 
-		$result = $atelrmaitem->store();
+		if (!$atelrmaitem->store()) {
+			die('atelrmaitem: ' . $atelrmaitem->getError());
+		}
 
 		//update warranty item table 
 		$atelwarrantyitem->id = $post['warranty_item_id'];
@@ -785,7 +790,10 @@ class RmaitemModel extends AdminModel
 			$atelwarrantyhistory->warranty_id = $post['warranty_item_id'];
 			$atelwarrantyhistory->serial_no_2 = $post['replacement_sn'];
 			$atelwarrantyhistory->replacement_pn = $post['replacement_pn'];
-			$result = $atelwarrantyhistory->store();
+			
+			if (!$atelwarrantyhistory->store()) {
+				die('atelwarrantyhistory: ' . $atelwarrantyhistory->getError());
+			}
 		}
 
 		PluginHelper::importPlugin('atelesis', 'logs');

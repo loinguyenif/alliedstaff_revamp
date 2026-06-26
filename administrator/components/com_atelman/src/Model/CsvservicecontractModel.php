@@ -178,7 +178,8 @@ class CsvservicecontractModel extends AdminModel
 
 					$service_contract_no	=	trim($line[0]);
 					$po_no					=	trim($line[1]);
-					$client_name 			= 	trim($line[2]);
+					$client_name 			= iconv('Windows-1258','UTF-8//IGNORE',$line[2]);
+					$client_name 			= 	trim($client_name);
 					$service_type 			= 	trim($line[3]);
 					$length_cover			=	trim($line[4]);
 					$model_no				=	trim($line[5]);
@@ -259,6 +260,7 @@ class CsvservicecontractModel extends AdminModel
 					$atelservicecontract->client_name 				= $client_name;
 					$atelservicecontract->remarks 		= '';
 					$atelservicecontract->reminder1 = 0;
+					$atelservicecontract->created_date = Factory::getDate()->toSql();
 
 					//$result = $atelservicecontract->store();
 					if (!$atelservicecontract->store()) {

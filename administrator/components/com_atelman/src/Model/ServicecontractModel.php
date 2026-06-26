@@ -405,6 +405,9 @@ class ServicecontractModel extends AdminModel
 
 		if (!$atelservicecontract->bind($data))
 			return false;
+		$atelservicecontract->user_id = $user->id;
+		$atelservicecontract->reminder1 = 0;
+		$atelservicecontract->created_date = Factory::getDate()->toSql();
 
 		$serial_no = $post['serial_no'];
 
@@ -435,9 +438,13 @@ class ServicecontractModel extends AdminModel
 		if (!$atelservicecontractitem->bind($itemdata))
 			return false;
 
-		$result = $atelservicecontractitem->store();
-
-		if ($atelservicecontract->store()) {
+		//$result = $atelservicecontractitem->store();
+		if (!$atelservicecontractitem->store()) {
+			die('atelservicecontractitem: ' . $atelservicecontractitem->getError());
+		}
+		if (!$atelservicecontract->store()) {
+			die('atelservicecontract: ' . $atelservicecontract->getError());
+		}else {
 
 			PluginHelper::importPlugin('atelesis', 'logs');
 			$dispatcher = Factory::getApplication()->getDispatcher();
