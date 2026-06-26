@@ -400,14 +400,13 @@ class ServicecontractModel extends AdminModel
 		$data['service_type'] = $post['service_type'];
 		$data['client_name'] = $post['client_name'];
 		$data['remarks'] = $post['remarks'];
+		$data['user_id'] = $loadData->user_id;
+		$data['reminder1'] = $loadData->reminder1;
 		$data['created_date'] = $loadData->created_date;
 
 
 		if (!$atelservicecontract->bind($data))
 			return false;
-		$atelservicecontract->user_id = $user->id;
-		$atelservicecontract->reminder1 = 0;
-
 		$serial_no = $post['serial_no'];
 
 		$query = " SELECT p.*, wi.serial_no, wi.id AS warranty_id FROM #__at_products AS p " .
