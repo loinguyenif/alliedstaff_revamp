@@ -384,23 +384,6 @@ class RmaitemModel extends AdminModel
 		$rma_order_file = $app->input->files->get('rma_order_file', array(), 'FILES');
 		$rma_request_file = $app->input->files->get('rma_request_file', array(), 'FILES');
 
-		if (!is_array($file)) {
-			$file = array();
-		}
-
-		if (!is_array($rma_order_file)) {
-			$rma_order_file = array();
-		}
-
-		if (!is_array($rma_request_file)) {
-			$rma_request_file = array();
-		}
-
-		$fileSizes = isset($file['size']) && is_array($file['size']) ? $file['size'] : array();
-		$fileNames = isset($file['name']) && is_array($file['name']) ? $file['name'] : array();
-		$fileErrors = isset($file['error']) && is_array($file['error']) ? $file['error'] : array();
-		$fileTmpNames = isset($file['tmp_name']) && is_array($file['tmp_name']) ? $file['tmp_name'] : array();
-
 		$rma_item_id 	= $post['cid'];
 		$status				=	$post['status'];
 		$rma_number 	=	$post['rmacode'];
@@ -456,7 +439,7 @@ class RmaitemModel extends AdminModel
 					if ($total_files < 2) {
 
 						for ($i = 0; $i < 5; $i++) {
-							if (!empty($fileSizes[$i] ?? null)) {
+							if ($file[$i]['size'] > 0) {
 								$total_files++;
 							}
 						}
@@ -485,7 +468,7 @@ class RmaitemModel extends AdminModel
 					if ($total_files < 3) {
 
 						for ($i = 0; $i < 5; $i++) {
-							if (!empty($fileSizes[$i] ?? null)) {
+							if ($file[$i]['size'] > 0) {
 								$total_files++;
 							}
 						}
@@ -503,21 +486,17 @@ class RmaitemModel extends AdminModel
 
 				$is_airway_bill = 0;
 
-				if (!empty($fileSizes[$i] ?? null)) {
+				if ($file[$i]['size'] > 0) {
 
-					$fileName = $fileNames[$i] ?? '';
-					$fileError = $fileErrors[$i] ?? 0;
-					$fileTmpName = $fileTmpNames[$i] ?? '';
-
-					$newfilename	= 	time() . '-' . preg_replace("/\s+/", "-", $fileName);
+					$newfilename	=	time() . '-' . preg_replace("/\s+/", "-", $file[$i]["name"]);
 
 					$allowedExts 	= array("pdf", "jpg", "jpeg", "gif", "png");
-					$temp = explode(".", $fileName);
+					$temp = explode(".", $file[$i]["name"]);
 					$extension = end($temp);
 
 					if (in_array($extension, $allowedExts)) {
 
-						if ($fileError == 0) {
+						if ($file[$i]["error"] == 0) {
 
 							$userId =	 	$user->id;
 
@@ -539,12 +518,12 @@ class RmaitemModel extends AdminModel
 							// Insert the object into the __at_rma_downloads table.
 							$result = $db->insertObject('#__at_rma_downloads', $data);
 
-							move_uploaded_file($fileTmpName, JPATH_ADMINISTRATOR . "/atelesis_docs/" . $newfilename);
+							move_uploaded_file($file[$i]["tmp_name"], JPATH_ADMINISTRATOR . "/atelesis_docs/" . $newfilename);
 
 							array_push($flname, $newfilename);
 						}
 					} else {
-						$this->setError(Text::_('RMA is not saved. File Upload is invalid for ' . $fileName . '. Please check your file type'));
+						$this->setError(Text::_('RMA is not saved. File Upload is invalid for ' . $file[$i]['name'] . '. Please check your file type'));
 						return false;
 					}
 				}
@@ -570,22 +549,19 @@ class RmaitemModel extends AdminModel
 
 
 		// RMA Order File
-		if (!empty($rma_order_file['size'] ?? null)) {
+		if ($rma_order_file['size'] > 0) {
 
 			$flname = array();
-			$rmaOrderFileName = $rma_order_file['name'] ?? '';
-			$rmaOrderFileError = $rma_order_file['error'] ?? 0;
-			$rmaOrderFileTmpName = $rma_order_file['tmp_name'] ?? '';
 
-			$newfilename	=	time() . '-' . preg_replace("/\s+/", "-", $rmaOrderFileName);
+			$newfilename	=	time() . '-' . preg_replace("/\s+/", "-", $rma_order_file["name"]);
 
 			$allowedExts 	= array("pdf", "jpg", "jpeg", "gif", "png");
-			$temp = explode(".", $rmaOrderFileName);
+			$temp = explode(".", $rma_order_file["name"]);
 			$extension = end($temp);
 
 			if (in_array($extension, $allowedExts)) {
 
-				if ($rmaOrderFileError == 0) {
+				if ($rma_order_file["error"] == 0) {
 
 					$userId =	 	$user->id;
 
@@ -601,7 +577,7 @@ class RmaitemModel extends AdminModel
 					// Insert the object into the __at_rma_downloads table.
 					$result = $db->insertObject('#__at_rma_downloads', $data);
 
-					move_uploaded_file($rmaOrderFileTmpName, JPATH_ADMINISTRATOR . "/atelesis_docs/" . $newfilename);
+					move_uploaded_file($rma_order_file["tmp_name"], JPATH_ADMINISTRATOR . "/atelesis_docs/" . $newfilename);
 
 					array_push($flname, $newfilename);
 
@@ -620,29 +596,26 @@ class RmaitemModel extends AdminModel
 					$dispatcher->dispatch('onAfterAction', $event);
 				}
 			} else {
-				$this->setError(JText::_('RMA is not saved. File Upload is invalid for ' . $rmaOrderFileName . '. Please check your file type'));
+				$this->setError(JText::_('RMA is not saved. File Upload is invalid for ' . $rma_order_file['name'] . '. Please check your file type'));
 				return false;
 			}
 		}
 
 
 		// RMA Request File
-		if (!empty($rma_request_file['size'] ?? null)) {
+		if ($rma_request_file['size'] > 0) {
 
 			$flname = array();
-			$rmaRequestFileName = $rma_request_file['name'] ?? '';
-			$rmaRequestFileError = $rma_request_file['error'] ?? 0;
-			$rmaRequestFileTmpName = $rma_request_file['tmp_name'] ?? '';
 
-			$newfilename	=	time() . '-' . preg_replace("/\s+/", "-", $rmaRequestFileName);
+			$newfilename	=	time() . '-' . preg_replace("/\s+/", "-", $rma_request_file["name"]);
 
 			$allowedExts 	= array("pdf", "jpg", "jpeg", "gif", "png");
-			$temp = explode(".", $rmaRequestFileName);
+			$temp = explode(".", $rma_request_file["name"]);
 			$extension = end($temp);
 
 			if (in_array($extension, $allowedExts)) {
 
-				if ($rmaRequestFileError == 0) {
+				if ($rma_request_file["error"] == 0) {
 
 					$userId =	 	$user->id;
 
@@ -657,7 +630,7 @@ class RmaitemModel extends AdminModel
 					// Insert the object into the __at_rma_downloads table.
 					$result = $db->insertObject('#__at_rma_downloads', $data);
 
-					move_uploaded_file($rmaRequestFileTmpName, JPATH_ADMINISTRATOR . "/atelesis_docs/" . $newfilename);
+					move_uploaded_file($rma_request_file["tmp_name"], JPATH_ADMINISTRATOR . "/atelesis_docs/" . $newfilename);
 
 					array_push($flname, $newfilename);
 
@@ -677,7 +650,7 @@ class RmaitemModel extends AdminModel
 					$dispatcher->dispatch('onAfterAction', $event);
 				}
 			} else {
-				$this->setError(Text::_('RMA is not saved. File Upload is invalid for ' . $rmaRequestFileName . '. Please check your file type'));
+				$this->setError(Text::_('RMA is not saved. File Upload is invalid for ' . $rma_request_file['name'] . '. Please check your file type'));
 				return false;
 			}
 		}
@@ -801,7 +774,7 @@ class RmaitemModel extends AdminModel
 			$atelrmaitem->replacement_pn = $post['replacement_pn'] ?? '';
 			$atelrmaitem->replacement_sn = $post['replacement_sn'] ?? '';
 		}
-		
+
 		if (!$atelrmaitem->store()) {
 			die('atelrmaitem: ' . $atelrmaitem->getError());
 		}

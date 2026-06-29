@@ -94,8 +94,8 @@ class HtmlView extends BaseHtmlView
 				}
 
 				/* FILES */
-
-				$filenames = $modelRmaItem->fileNameRMA($this->item->id);
+				$cid = Factory::getApplication()->input->getInt('id');
+				$filenames = $modelRmaItem->fileNameRMA($cid);
 
 				$filenameArr = array();
 
@@ -106,7 +106,7 @@ class HtmlView extends BaseHtmlView
 				endforeach;
 
 				/* FILES - RMA ORDER / REQUEST */
-				$filenames = $modelRmaItem->fileNameRMAOrderRequest($this->item->id);
+				$filenames = $modelRmaItem->fileNameRMAOrderRequest($cid);
 
 				$filenameRMAArr = array();
 				if (!empty($filenames)) {
