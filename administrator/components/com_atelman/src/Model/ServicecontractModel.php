@@ -437,10 +437,10 @@ class ServicecontractModel extends AdminModel
 
 		//$result = $atelservicecontractitem->store();
 		if (!$atelservicecontractitem->store()) {
-			die('atelservicecontractitem: ' . $atelservicecontractitem->getError());
+			//$this->setError('atelservicecontractitem: ' . $atelservicecontractitem->getError());
 		}
 		if (!$atelservicecontract->store()) {
-			die('atelservicecontract: ' . $atelservicecontract->getError());
+			//$this->setError('atelservicecontract: ' . $atelservicecontract->getError());
 		}else {
 
 			PluginHelper::importPlugin('atelesis', 'logs');

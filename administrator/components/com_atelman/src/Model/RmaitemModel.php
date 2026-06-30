@@ -403,9 +403,10 @@ class RmaitemModel extends AdminModel
 			$atelrmarequest->telephone = $post['telephone'];
 			$atelrmarequest->fax = $post['fax'];
 			$atelrmarequest->email = $post['email'];
+			$atelrmarequest->created_date = Factory::getDate()->toSql();
 
 			if (!$atelrmarequest->store()) {
-				die('atelrmarequest: ' . $atelrmarequest->getError());
+				//$this->setError('atelrmarequest: ' . $atelrmarequest->getError());
 			}
 		}
 
@@ -776,7 +777,7 @@ class RmaitemModel extends AdminModel
 		}
 
 		if (!$atelrmaitem->store()) {
-			die('atelrmaitem: ' . $atelrmaitem->getError());
+			//$this->setError('atelrmaitem: ' . $atelrmaitem->getError());
 		}
 
 		//update warranty item table 
@@ -795,7 +796,7 @@ class RmaitemModel extends AdminModel
 			$atelwarrantyhistory->replacement_pn = $post['replacement_pn'];
 			
 			if (!$atelwarrantyhistory->store()) {
-				die('atelwarrantyhistory: ' . $atelwarrantyhistory->getError());
+				//$this->setError('atelwarrantyhistory: ' . $atelwarrantyhistory->getError());
 			}
 		}
 

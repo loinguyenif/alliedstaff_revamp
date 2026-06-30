@@ -264,7 +264,7 @@ class CsvservicecontractModel extends AdminModel
 
 					//$result = $atelservicecontract->store();
 					if (!$atelservicecontract->store()) {
-						die($atelservicecontract->getError());
+						//$this->setError($atelservicecontract->getError());
 					}
 
 					$service_contract_item_id = '';
@@ -289,7 +289,7 @@ class CsvservicecontractModel extends AdminModel
 
 					//$result = $atelservicecontractitem->store();
 					if (!$atelservicecontractitem->store()) {
-						die($atelservicecontractitem->getError());
+						//$this->setError($atelservicecontractitem->getError());
 					}
 				}
 			}
