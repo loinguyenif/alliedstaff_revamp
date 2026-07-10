@@ -155,4 +155,33 @@ class ServicecontractsController extends AdminController
 
 		exit;
 	}
+
+
+	public function delete()
+	{
+		// Check for request forgeries
+		$this->checkToken();
+
+		// Get IDs from request
+		$cid = $this->input->get('cid', array(), 'array');
+
+		$cid = array_map('intval', $cid);
+		if (empty($cid)) {
+			$this->setMessage(Text::_('COM_SERVICECONTRACTS_NO_ITEM_SELECTED'), 'warning');
+			$this->setRedirect('index.php?option=com_atelman&view=servicecontracts');
+			return false;
+		}
+
+		$model = $this->getModel('Servicecontracts', 'Administrator');
+
+		try {
+			$count = $model->remove($cid);
+			$this->setMessage(Text::sprintf('Service Contract(s) Removed !', 'success'));
+		} catch (\Exception $e) {
+			$this->setMessage('Error : Service Contract(s) Not Removed', 'error');
+		}
+
+		$this->setRedirect('index.php?option=com_atelman&view=servicecontracts');
+		return true;
+	}
 }

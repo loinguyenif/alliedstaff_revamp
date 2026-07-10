@@ -248,4 +248,63 @@ class ServicecontractsModel extends ListModel
 
 		return $items;
 	}
+
+	public function remove($cid = array()){
+			
+		if(empty($cid)) return false;
+		
+		$db = $this->getDbo();
+		$user = Factory::getUser();
+		
+		$service_contract_idsarr = array();
+		$rma_serial_no_arr = array();
+		
+		foreach($cid as $c) :
+		
+			$query = " SELECT service_contract_id FROM #__at_service_contract_product_xref WHERE id = ". $c;
+			$db->setQuery( $query );
+			$service_contract_id = $db->loadResult();
+			
+			if(!in_array($service_contract_id,$service_contract_idsarr))
+			array_push($service_contract_idsarr, $service_contract_id);
+		
+		endforeach;
+		
+		$query = " SELECT s.*, cp.serial_no FROM #__at_service_contract_product_xref AS cp "
+		.	" LEFT JOIN #__at_service_contract AS s ON s.id = cp.service_contract_id "
+		.	" WHERE cp.id IN (".implode(',',$cid).") ";
+		$db->setQuery( $query );
+		$items = $db->loadObjectList();
+		
+		$cid = array_map('intval', $cid);
+		$db->setQuery('DELETE FROM #__at_service_contract_product_xref WHERE id IN (' . implode(',', $cid) . ')');
+		if (!$db->execute()) {
+			return false;
+		}
+		
+		foreach($items as $item) :
+			\Joomla\CMS\Plugin\PluginHelper::importPlugin('atelesis', 'logs');
+			$dispatcher = Factory::getApplication()->getDispatcher();
+			$log = new \stdClass();
+			$log->section = 'SERVICE_CONTRACT_ITEM';
+			$log->action_type = 'DELETE';
+			$log->action_by = $user->id;
+			$log->action_remarks = 'Delete Service Contract Item (' . ($item->service_contract_no ? $item->service_contract_no : 'N/A') . '): #' . $item->serial_no;
+			$log->id = '';
+			
+			$before_update = json_encode($item);
+			$after_update = json_encode(array());
+			
+			$event = new \Joomla\Event\Event('onAfterAction', [
+				'log' => $log,
+				'before' => $before_update,
+				'after' => $after_update,
+			]);
+			
+			$dispatcher->dispatch('onAfterAction', $event);
+		endforeach;
+		
+		
+		return true;
+	}
 }
