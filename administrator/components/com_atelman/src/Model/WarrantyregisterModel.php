@@ -370,7 +370,7 @@ class WarrantyregisterModel extends AdminModel
 
 		$obj = new stdClass();
 		$obj->html = $html;
-		$obj->status = ((!empty($items)) ? 1 : 0);
+		$obj->status = ((!empty($items)) ? 1 : 0); 
 		return $obj;
 	}
 }

@@ -94,7 +94,7 @@ class ServicecontractsModel extends ListModel
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// List state information.
-		parent::populateState('id', 'DESC');
+		parent::populateState('cp.id', 'DESC');
 
 		$context = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $context);
@@ -173,7 +173,7 @@ class ServicecontractsModel extends ListModel
 		// Join over the user field 'user_id'
 		$query->select('CASE WHEN a.customer_id != \'\' THEN (SELECT u.name FROM #__users AS u WHERE u.customer_id = a.customer_id LIMIT 1) ELSE \'\' END AS distributor_name  , cp.id AS pid');
 		$query->join('LEFT', '#__users AS `u` ON `u`.customer_id = a.`customer_id`');
-
+		$query->where('cp.id IS NOT NULL');
 
 
 		// Filter by search in title
@@ -224,7 +224,7 @@ class ServicecontractsModel extends ListModel
 
 
 		// Add the list ordering clause.
-		$orderCol  = $this->state->get('list.ordering', 'a.id');
+		$orderCol  = $this->state->get('list.ordering', 'cp.id');
 		$orderDirn = $this->state->get('list.direction', 'DESC');
 		if ($orderCol == "id") {
 			$orderCol = "a.id";
@@ -232,7 +232,6 @@ class ServicecontractsModel extends ListModel
 		if ($orderCol && $orderDirn) {
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
-
 		return $query;
 	}
 
