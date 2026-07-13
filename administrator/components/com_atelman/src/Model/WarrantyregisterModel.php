@@ -293,11 +293,13 @@ class WarrantyregisterModel extends AdminModel
 				$where[] = ' w.invoice_no = ' . $db->quote($invoice_no);
 			}
 			if ($serial_no) {
-				$where[] = " (CASE "
-					.	" WHEN w.serial_no_2 != '' THEN LOWER(serial_no_2) LIKE " . $db->quote($serial_no, false) . " "
-					.	" WHEN w.serial_no != '' THEN LOWER(serial_no) LIKE " . $db->quote($serial_no, false)
-					.	" ELSE 0 "
-					. " END) ";
+				$serial = strtolower($serial_no);
+
+				$where[] = "(
+					(w.serial_no_2 <> '' AND LOWER(w.serial_no_2) = " . $db->quote($serial) . ")
+					OR
+					(w.serial_no_2 = '' AND LOWER(w.serial_no) = " . $db->quote($serial) . ")
+				)";
 			}
 
 			/**/
@@ -370,7 +372,7 @@ class WarrantyregisterModel extends AdminModel
 
 		$obj = new stdClass();
 		$obj->html = $html;
-		$obj->status = ((!empty($items)) ? 1 : 0); 
+		$obj->status = ((!empty($items)) ? 1 : 0);
 		return $obj;
 	}
 }
