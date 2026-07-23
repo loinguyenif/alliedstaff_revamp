@@ -375,7 +375,7 @@ class ServicecontractModel extends AdminModel
 		$user = Factory::getUser();
 
 		$atelservicecontract = $this->getTable('Servicecontract');
-		$atelservicecontractitem = $this->getTable('Servicecontractproductxref');
+		$atelservicecontractitem =  $this->getTable('Servicecontractproductxref');
 
 		$data = array();
 
@@ -414,22 +414,26 @@ class ServicecontractModel extends AdminModel
 
 		$db->setQuery($query);
 		$tmps = $db->loadObject();
+
+		//new code warranty_id
+		$query = " SELECT * FROM #__at_service_contract_product_xref WHERE id = " . $db->Quote($post['cid'], false);
+		$db->setQuery($query);
+		$item = $db->loadObject();
+
 		$itemdata = array();
-		$itemdata['id']				=	$post['cid'];
+		$itemdata['id']			= $post['cid'];		
+		$itemdata['service_contract_id'] = $post['service_contract_id'];
+		$itemdata['warranty_id'] = $item->warranty_id;
 		$itemdata['serial_no'] 	= $post['serial_no'];
 		$itemdata['part_no'] 	= $post['part_no'];
 		$itemdata['model_no'] 	= $post['model_no'];
-		$itemdata['service_contract_id'] 	= $post['service_contract_id'];
+		
 
 		if ($tmps) { // if system has for this serial_no in warranty table, please update to this.
-
-			$itemdata = array();
-			$itemdata['id']				=	$post['cid'];
 			$itemdata['warranty_id'] 	= $tmps->warranty_id;
 			$itemdata['serial_no'] 	= $tmps->serial_no;
 			$itemdata['part_no'] 	= $tmps->product_no;
 			$itemdata['model_no'] 	= $tmps->model_no;
-			$itemdata['service_contract_id'] 	= $post['service_contract_id'];
 		}
 
 		if (!$atelservicecontractitem->bind($itemdata))
@@ -437,10 +441,10 @@ class ServicecontractModel extends AdminModel
 
 		//$result = $atelservicecontractitem->store();
 		if (!$atelservicecontractitem->store()) {
-			//$this->setError('atelservicecontractitem: ' . $atelservicecontractitem->getError());
+			//$app->enqueueMessage('atelservicecontractitem: ' . $atelservicecontractitem->getError(), 'error');
 		}
 		if (!$atelservicecontract->store()) {
-			//$this->setError('atelservicecontract: ' . $atelservicecontract->getError());
+			//$app->enqueueMessage('atelservicecontract: ' . $atelservicecontract->getError());
 		}else {
 
 			PluginHelper::importPlugin('atelesis', 'logs');

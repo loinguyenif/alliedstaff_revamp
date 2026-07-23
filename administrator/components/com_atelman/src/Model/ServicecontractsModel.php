@@ -282,14 +282,14 @@ class ServicecontractsModel extends ListModel
 		}
 		
 		foreach($items as $item) :
-			\Joomla\CMS\Plugin\PluginHelper::importPlugin('atelesis', 'logs');
+			PluginHelper::importPlugin('atelesis', 'logs');
 			$dispatcher = Factory::getApplication()->getDispatcher();
-			$log = new \stdClass();
+			$log = new stdClass();
 			$log->section = 'SERVICE_CONTRACT_ITEM';
 			$log->action_type = 'DELETE';
 			$log->action_by = $user->id;
 			$log->action_remarks = 'Delete Service Contract Item (' . ($item->service_contract_no ? $item->service_contract_no : 'N/A') . '): #' . $item->serial_no;
-			$log->id = '';
+			$log->id = $item->id;
 			
 			$before_update = json_encode($item);
 			$after_update = json_encode(array());
